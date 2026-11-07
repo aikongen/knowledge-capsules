@@ -1,6 +1,6 @@
 # Shared design guidelines
 
-Use these rules when designing, changing or reviewing anything a person sees, reads, decides or recovers from in a Surfaces consumer. This is the authoritative source for shared product design. Platform guidance determines how these outcomes are presented, without waiving usability, accessibility, consent or truthful status.
+Use these rules when designing, changing or reviewing anything a person sees, reads, decides or recovers from. This is the authoritative source for shared product design. Platform guidance determines how these outcomes are presented, without waiving usability, accessibility, consent or truthful status.
 
 ## Apply the rules without being asked
 

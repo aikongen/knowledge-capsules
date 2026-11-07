@@ -73,7 +73,7 @@ const examplesDir = fileURLToPath(new URL("../../../examples/", import.meta.url)
 describe("rebuildCatalogFromCanonicalVault", () => {
   it("indexes a core-only guidelines capsule without a profile, items or freshness", async () => {
     const vaultRoot = join(workDir, "vault");
-    const draftRoot = join(vaultRoot, "capsules", "surfaces", "design-guidelines", "drafts", "d1");
+    const draftRoot = join(vaultRoot, "capsules", "aikongen", "design-guidelines", "drafts", "d1");
     await mkdir(draftRoot, { recursive: true });
     await cp(join(examplesDir, "design-guidelines"), draftRoot, { recursive: true });
     const manifestPath = join(draftRoot, "capsule.json");

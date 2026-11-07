@@ -14,7 +14,7 @@ Two finished examples: [design-guidelines](https://github.com/aikongen/knowledge
 
 | Field | Meaning |
 | --- | --- |
-| `id` | `namespace/name`, lowercase, e.g. `surfaces/design-guidelines` |
+| `id` | `namespace/name`, lowercase, e.g. `aikongen/design-guidelines` |
 | `version` | your choice, e.g. `1.0.0`; a changed capsule needs a new version |
 | `kind` | `"guidelines"` |
 | `trigger` | one line, up to 300 characters; best started with "Use when…" |

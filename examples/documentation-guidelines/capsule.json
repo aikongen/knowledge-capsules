@@ -1,6 +1,6 @@
 {
-  "id": "surfaces/documentation-guidelines",
-  "version": "1.0.1",
+  "id": "aikongen/documentation-guidelines",
+  "version": "1.1.0",
   "kind": "guidelines",
   "trigger": "Use when writing, changing or reviewing Markdown documentation for any reader.",
   "scope": {

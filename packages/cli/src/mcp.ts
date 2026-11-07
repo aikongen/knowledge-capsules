@@ -63,7 +63,7 @@ export function buildServer(vault: Vault, cwd: string): McpServer {
     {
       description: 'Read a capsule whose "use when" line matches your task. Returns its details as JSON, then its text.',
       inputSchema: {
-        id: z.string().describe("capsule id, for example surfaces/design-guidelines"),
+        id: z.string().describe("capsule id, for example aikongen/design-guidelines"),
         version: z.string().optional().describe("optional; X.Y.Z; if left out, the version this repository uses, else the newest"),
       },
     },
@@ -93,7 +93,7 @@ export function buildServer(vault: Vault, cwd: string): McpServer {
     {
       description: "Call once after a capsule shaped your work. kc records it in the vault's usage log.",
       inputSchema: {
-        capsule: z.string().describe("capsule id, for example surfaces/design-guidelines"),
+        capsule: z.string().describe("capsule id, for example aikongen/design-guidelines"),
         digest: z.string().optional().describe("fingerprint sha256:... as returned by get_capsule"),
         note: z.string().optional().describe("one line on how it helped"),
       },

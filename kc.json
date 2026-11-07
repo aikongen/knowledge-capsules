@@ -2,14 +2,14 @@
   "schemaVersion": "0.1",
   "capsules": [
     {
-      "id": "surfaces/design-guidelines",
-      "version": "1.0.1",
-      "digest": "sha256:2a566e6eda6e324045edfff46a1a118053dc710dde0157ad960f86946bf683c7"
+      "id": "aikongen/design-guidelines",
+      "version": "1.1.0",
+      "digest": "sha256:22a2e54e3e7861d126d6acecb11a03b9abe1c53a0fbe10f0228e1c3a1497b156"
     },
     {
-      "id": "surfaces/documentation-guidelines",
-      "version": "1.0.1",
-      "digest": "sha256:f14545301fff506cab621373018b6dd3a24a89241b6280f1ee3d00e2704dd4ae"
+      "id": "aikongen/documentation-guidelines",
+      "version": "1.1.0",
+      "digest": "sha256:15fae72fa989a331b18c7006c9c9ab127723d9e3befd5001556d5da81b37177b"
     }
   ]
 }

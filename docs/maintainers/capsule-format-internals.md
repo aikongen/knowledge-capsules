@@ -29,7 +29,7 @@ Research capsules (and any capsule that chooses to carry them) add more, all lis
 
 | PRD word | Manifest field | Rule |
 | --- | --- | --- |
-| Identity | `id` | `namespace/name`, lowercase letters, digits, `.`, `_`, `-`, e.g. `surfaces/design-guidelines` |
+| Identity | `id` | `namespace/name`, lowercase letters, digits, `.`, `_`, `-`, e.g. `aikongen/design-guidelines` |
 | Version | `version` | semantic version chosen by the publisher |
 | Content digest | `digest` | `sha256:<64 hex>`, computed on publish, required once `status` is `published` |
 | Scope | `scope` | inline: `includes` and `excludes` (string lists); `assumptions` optional for guidelines |

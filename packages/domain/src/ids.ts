@@ -58,7 +58,7 @@ export function parseBranded<T extends string>(
   }
   if (!pattern.test(value)) {
     if (kind === "capsuleId") {
-      const sentence = `${JSON.stringify(value)} is not a capsule id; use namespace/name in lowercase, for example surfaces/design-guidelines`;
+      const sentence = `${JSON.stringify(value)} is not a capsule id; use namespace/name in lowercase, for example aikongen/design-guidelines`;
       return err(
         new KcError("validation_failed", sentence, {
           details: [detail("DOM-ID-01", at, sentence, { kind, pattern: pattern.source })],

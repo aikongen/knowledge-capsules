@@ -13,9 +13,9 @@ Your design rules and hard-won answers live as copies in every repository. kc ke
 
 ```text
 $ kc publish ./design-guidelines
-published surfaces/design-guidelines@1.0.1
-$ kc add surfaces/design-guidelines@1.0.1
-this repository now uses surfaces/design-guidelines@1.0.1
+published aikongen/design-guidelines@1.1.0
+$ kc add aikongen/design-guidelines@1.1.0
+this repository now uses aikongen/design-guidelines@1.1.0
 $ kc connect claude-code
 claude-code can now find your capsules (.mcp.json)
 and left a note for it in CLAUDE.md

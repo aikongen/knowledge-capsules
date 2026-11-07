@@ -103,16 +103,16 @@ Binary: `kc`, 63 MB, macOS arm64. Temp vaults, `KC_VAULT` set per command.
 $ kc init
 created the vault at .../w1
 $ kc publish examples/design-guidelines
-published surfaces/design-guidelines@1.0.1
+published aikongen/design-guidelines@1.1.0
 $ kc publish examples/documentation-guidelines
-published surfaces/documentation-guidelines@1.0.1
+published aikongen/documentation-guidelines@1.1.0
 $ kc status
 vault: .../w1
 capsules: 2, versions: 2
-$ kc export surfaces/design-guidelines@1.0.1 design.zip
-exported surfaces/design-guidelines@1.0.1 to .../design.zip
+$ kc export aikongen/design-guidelines@1.1.0 design.zip
+exported aikongen/design-guidelines@1.1.0 to .../design.zip
 $ KC_VAULT=w2 kc import design.zip
-imported surfaces/design-guidelines@1.0.1
+imported aikongen/design-guidelines@1.1.0
 ```
 
 The fingerprint after export and import is the one from `publish` (`sha256:bec437fe...ca7a17` for design-guidelines 1.0.1).

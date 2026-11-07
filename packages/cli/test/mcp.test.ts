@@ -17,7 +17,7 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
   await kc(box, ["init"]);
   await kc(box, ["publish", DESIGN]);
   await kc(box, ["publish", DOCS]);
-  const DESIGN_DIGEST = await publishedDigest(box, "surfaces/design-guidelines", "1.0.1");
+  const DESIGN_DIGEST = await publishedDigest(box, "aikongen/design-guidelines", "1.1.0");
 
   const transport = new StdioClientTransport({
     command: process.execPath,
@@ -32,12 +32,12 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
     expect(tools).toEqual(["get_capsule", "get_version", "list_capsules", "report_usage"]);
 
     const listed = JSON.parse(blocks(await client.callTool({ name: "list_capsules", arguments: {} }))[0]!.text) as { id: string; trigger: string }[];
-    expect(listed.map((c) => c.id)).toEqual(["surfaces/design-guidelines", "surfaces/documentation-guidelines"]);
+    expect(listed.map((c) => c.id)).toEqual(["aikongen/design-guidelines", "aikongen/documentation-guidelines"]);
     expect(listed.every((c) => c.trigger.length > 0)).toBe(true);
     expect(listed.every((c) => Object.keys(c).sort().join() === "id,trigger,version")).toBe(true);
 
-    const capsule = blocks(await client.callTool({ name: "get_capsule", arguments: { id: "surfaces/design-guidelines" } }));
-    expect(JSON.parse(capsule[0]!.text)).toMatchObject({ id: "surfaces/design-guidelines", version: "1.0.1", digest: DESIGN_DIGEST, kind: "guidelines" });
+    const capsule = blocks(await client.callTool({ name: "get_capsule", arguments: { id: "aikongen/design-guidelines" } }));
+    expect(JSON.parse(capsule[0]!.text)).toMatchObject({ id: "aikongen/design-guidelines", version: "1.1.0", digest: DESIGN_DIGEST, kind: "guidelines" });
     expect(capsule[1]!.text).toBe(await readFile(join(DESIGN, "canonical.md"), "utf8"));
 
     const exact = blocks(await client.callTool({ name: "get_version", arguments: { digest: DESIGN_DIGEST } }));
@@ -49,14 +49,14 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
 
     const usage = await client.callTool({
       name: "report_usage",
-      arguments: { capsule: "surfaces/design-guidelines", digest: DESIGN_DIGEST, note: "layout rules" },
+      arguments: { capsule: "aikongen/design-guidelines", digest: DESIGN_DIGEST, note: "layout rules" },
     });
     expect((usage as { isError?: boolean }).isError).toBeUndefined();
     expect(JSON.parse(blocks(usage)[0]!.text)).toEqual({ recorded: true });
     const files = await readdir(join(box.vault, "usage"));
     expect(files).toHaveLength(1);
     expect(JSON.parse(await readFile(join(box.vault, "usage", files[0]!), "utf8"))).toMatchObject({
-      capsule: "surfaces/design-guidelines",
+      capsule: "aikongen/design-guidelines",
       digest: DESIGN_DIGEST,
       note: "layout rules",
     });
@@ -71,7 +71,7 @@ test("inside a repository with kc.json, list_capsules shows only the pinned caps
   await kc(box, ["init"]);
   await kc(box, ["publish", DOCS]);
   await kc(box, ["publish", DESIGN]);
-  await kc(box, ["add", "surfaces/design-guidelines@1.0.1"]);
+  await kc(box, ["add", "aikongen/design-guidelines@1.1.0"]);
   const client = new Client({ name: "test", version: "0.0.0" });
   await client.connect(
     new StdioClientTransport({
@@ -83,7 +83,7 @@ test("inside a repository with kc.json, list_capsules shows only the pinned caps
   );
   try {
     const listed = JSON.parse(blocks(await client.callTool({ name: "list_capsules", arguments: {} }))[0]!.text) as { id: string }[];
-    expect(listed.map((c) => c.id)).toEqual(["surfaces/design-guidelines"]);
+    expect(listed.map((c) => c.id)).toEqual(["aikongen/design-guidelines"]);
   } finally {
     await client.close();
   }
