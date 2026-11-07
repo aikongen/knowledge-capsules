@@ -2,6 +2,11 @@
   "schemaVersion": "0.1",
   "capsules": [
     {
+      "id": "aikongen/capsule-writing-guidelines",
+      "version": "1.0.0",
+      "digest": "sha256:2fe268308cac77c7847f71065e2d35e238bb9595c2292c6ce590ae282fa5e189"
+    },
+    {
       "id": "aikongen/design-guidelines",
       "version": "1.1.0",
       "digest": "sha256:22a2e54e3e7861d126d6acecb11a03b9abe1c53a0fbe10f0228e1c3a1497b156"
