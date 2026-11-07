@@ -4,6 +4,10 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ## Unreleased
 
+### Fixed
+
+- `install.sh` replaces an installed `kc` as a new file; on macOS, copying over a running-before binary made the system stop it at start.
+
 ## 0.1.0-preview.7 - 2026-11-07
 
 ### Fixed

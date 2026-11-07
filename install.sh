@@ -38,6 +38,7 @@ if [ -z "$EXPECTED" ] || [ "$EXPECTED" != "$ACTUAL" ]; then
 fi
 
 mkdir -p "$DEST_DIR"
+rm -f "$DEST_DIR/kc"
 cp "$TMP/$ASSET" "$DEST_DIR/kc"
 chmod +x "$DEST_DIR/kc"
 echo "kc installed to $DEST_DIR/kc"
