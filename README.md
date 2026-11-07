@@ -3,7 +3,7 @@
 ![Knowledge Capsules](assets/banner.png)
 
 <p align="center">
-  <a href="https://github.com/aikongen/knowledge-capsules/releases"><img src="https://img.shields.io/badge/pre--release-0.1.0--preview.6-6941C6?style=flat" alt="Pre-release 0.1.0-preview.6"></a>
+  <a href="https://github.com/aikongen/knowledge-capsules/releases"><img src="https://img.shields.io/badge/pre--release-0.1.0--preview.7-6941C6?style=flat" alt="Pre-release 0.1.0-preview.7"></a>
   <img src="https://img.shields.io/badge/macOS_arm64_%C2%B7_Linux_x64_%C2%B7_Windows_x64-1F1A33?style=flat" alt="macOS arm64, Linux x64, Windows x64">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7F56D9?style=flat" alt="MIT license"></a>
   <img src="https://img.shields.io/badge/Claude_Code_%C2%B7_Codex_%C2%B7_OpenCode-1F1A33?style=flat" alt="Works with Claude Code, Codex and OpenCode">
@@ -36,7 +36,7 @@ Start Claude Code in that repository. The note tells it to look; it sees each ca
   </tr>
 </table>
 
-Pictures show the real `kc` 0.1.0-preview.6 with the example capsules from this repository.
+Pictures show the real `kc` 0.1.0-preview.7 with the example capsules from this repository.
 
 **kc never changes a published version, never copies a capsule's text into your repository, and never uses the network or sends anything anywhere. `kc connect` writes only your agent's config file and one marked note.**
 

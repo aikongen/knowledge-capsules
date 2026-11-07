@@ -4,6 +4,23 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ## Unreleased
 
+## 0.1.0-preview.7 - 2026-11-07
+
+### Fixed
+
+- `kc connect codex` writes the tools approval setting so Codex can call kc without a prompt, and honours `CODEX_HOME`.
+- `kc connect opencode` turns off OpenCode's code mode so the kc tools are direct.
+
+### Changed
+
+- Codex and OpenCode verified end to end (both call the kc tools and record usage).
+
+### Known limits
+
+- No Intel Mac build yet.
+- Pi is not tested.
+- The Windows installer is not tested.
+
 ## 0.1.0-preview.6 - 2026-11-07
 
 ### Changed
