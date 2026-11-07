@@ -1,0 +1,13 @@
+{
+  "name": "@kc/capsule-format",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@kc/contracts": "workspace:*",
+    "@kc/domain": "workspace:*"
+  }
+}

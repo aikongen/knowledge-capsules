@@ -1,0 +1,12 @@
+node_modules/
+dist/
+/.bro/
+.DS_Store
+/spike/
+*.bundle
+.env*
+coverage/
+/.bro-code/
+/.claude/
+/.agents/
+/.codex/

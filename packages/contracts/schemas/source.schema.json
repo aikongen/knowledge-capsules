@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-capsules.local/schemas/0.1/source.schema.json",
+  "title": "Source Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "capsuleId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$"
+    },
+    "localId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "filePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "title",
+    "origin",
+    "acquisition",
+    "verification",
+    "rights",
+    "classification"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/localId"
+    },
+    "kind": {
+      "enum": [
+        "web",
+        "document",
+        "standard",
+        "paper",
+        "repository",
+        "source_code",
+        "dataset",
+        "api",
+        "database",
+        "interview",
+        "report",
+        "internal_artifact",
+        "other"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "creators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "string"
+        }
+      },
+      "minProperties": 1
+    },
+    "version": {
+      "type": "string"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z$"
+    },
+    "effectiveFrom": {
+      "type": "string",
+      "format": "date"
+    },
+    "effectiveUntil": {
+      "type": "string",
+      "format": "date"
+    },
+    "contentDigest": {
+      "$ref": "#/$defs/digest"
+    },
+    "localArtifactPath": {
+      "$ref": "#/$defs/filePath"
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "discoveredAt",
+        "method",
+        "originalRetrieved"
+      ],
+      "properties": {
+        "discoveredAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "retrievedAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "method": {
+          "type": "string"
+        },
+        "originalRetrieved": {
+          "type": "boolean"
+        },
+        "retrievalNotes": {
+          "type": "string"
+        },
+        "acquisitionId": {
+          "$ref": "#/$defs/localId",
+          "description": "Gateway acquisition record. Required before originalRetrieved may be true."
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "method"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "unverified",
+            "metadata_only",
+            "retrieved",
+            "verified",
+            "rejected"
+          ]
+        },
+        "method": {
+          "type": "string"
+        },
+        "verifiedAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "verifiedBy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "authority": {
+          "enum": [
+            "unknown",
+            "low",
+            "medium",
+            "high",
+            "primary"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "redistribution"
+      ],
+      "properties": {
+        "license": {
+          "type": "string"
+        },
+        "redistribution": {
+          "enum": [
+            "allowed",
+            "excerpt_only",
+            "reference_only",
+            "prohibited",
+            "unknown"
+          ]
+        },
+        "attribution": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "classification": {
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    }
+  }
+}

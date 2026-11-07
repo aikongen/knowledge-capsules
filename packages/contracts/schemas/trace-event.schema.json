@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-capsules.local/schemas/0.1/trace-event.schema.json",
+  "title": "Trace Event v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "capsuleId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$"
+    },
+    "localId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "filePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "traceId",
+    "timestamp",
+    "eventType",
+    "actor",
+    "outcome",
+    "references",
+    "attributes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "eventId": {
+      "$ref": "#/$defs/localId"
+    },
+    "traceId": {
+      "$ref": "#/$defs/localId"
+    },
+    "spanId": {
+      "$ref": "#/$defs/localId"
+    },
+    "parentSpanId": {
+      "$ref": "#/$defs/localId"
+    },
+    "linkedTraceIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/localId"
+      }
+    },
+    "timestamp": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "eventType": {
+      "enum": [
+        "trace_started",
+        "trace_completed",
+        "trace_failed",
+        "span_started",
+        "span_completed",
+        "span_failed",
+        "research_run_created",
+        "research_run_started",
+        "research_run_paused",
+        "research_run_resumed",
+        "research_run_cancelled",
+        "research_run_completed",
+        "capsule_matched",
+        "capsule_resolved",
+        "context_pack_created",
+        "item_delivered",
+        "item_fetched",
+        "evidence_fetched",
+        "item_cited",
+        "context_pack_accepted",
+        "context_pack_rejected",
+        "feedback_recorded",
+        "research_bypass_detected",
+        "gap_identified",
+        "conflict_identified",
+        "worker_dispatched",
+        "worker_started",
+        "worker_completed",
+        "worker_failed",
+        "worker_retried",
+        "source_discovered",
+        "source_acquired",
+        "source_verified",
+        "source_rejected",
+        "evidence_linked",
+        "item_proposed",
+        "item_revised",
+        "item_rejected",
+        "synthesis_created",
+        "review_requested",
+        "review_completed",
+        "evaluation_started",
+        "evaluation_passed",
+        "evaluation_failed",
+        "draft_approved",
+        "capsule_published",
+        "learning_candidate_created",
+        "research_run_scoped",
+        "draft_created",
+        "capsule_exported",
+        "capsule_imported",
+        "capsule_quarantined",
+        "learning_candidate_accepted",
+        "learning_candidate_rejected",
+        "stream_closed"
+      ]
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "human",
+            "agent",
+            "system",
+            "application"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "effort": {
+          "type": "string"
+        }
+      }
+    },
+    "outcome": {
+      "enum": [
+        "unknown",
+        "started",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "partial",
+        "skipped",
+        "accepted",
+        "rejected"
+      ]
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "capsuleId": {
+          "$ref": "#/$defs/capsuleId"
+        },
+        "capsuleVersion": {
+          "$ref": "#/$defs/semver"
+        },
+        "capsuleDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "knowledgeItemId": {
+          "$ref": "#/$defs/localId"
+        },
+        "sourceId": {
+          "$ref": "#/$defs/localId"
+        },
+        "evidenceId": {
+          "$ref": "#/$defs/localId"
+        },
+        "researchRunId": {
+          "$ref": "#/$defs/localId"
+        },
+        "resolutionId": {
+          "$ref": "#/$defs/localId"
+        },
+        "contextPackId": {
+          "$ref": "#/$defs/localId"
+        },
+        "learningCandidateId": {
+          "$ref": "#/$defs/localId"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "durationMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "inputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cachedTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "costCurrency": {
+          "type": "string"
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "details": {
+          "type": "object"
+        }
+      }
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

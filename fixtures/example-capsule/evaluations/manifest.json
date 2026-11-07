@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "0.1",
+  "status": "not_run",
+  "checks": [
+    {
+      "id": "eval-fixture-scope",
+      "kind": "manual",
+      "question": "Does the resolver return partial when asked about signing or auto-update?",
+      "required": true
+    }
+  ],
+  "results": []
+}

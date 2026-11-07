@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#06070A;}
+.b{position:relative;width:1600px;height:400px;overflow:hidden;background:radial-gradient(ellipse 760px 400px at 1190px 200px,#11131A 0%,#06070A 72%);font-family:Inter,sans-serif;}
+svg{position:absolute;inset:0;}
+.t{position:absolute;left:84px;top:112px;}
+h1{margin:0;font-size:84px;line-height:.96;font-weight:700;letter-spacing:-.04em;color:#F3F4F6}
+p{margin:26px 0 0;font-size:27px;font-weight:400;color:#8B919C;letter-spacing:-.015em}
+p b{color:#B692F6;font-weight:500}
+</style></head><body>
+<div class="b">
+<svg id="g" width="1600" height="400" viewBox="0 0 1600 400"></svg>
+<div class="t">
+<h1>Knowledge<br>Capsules</h1>
+<p><b>Write it once.</b> Every agent gets the same answer.</p>
+</div>
+</div>
+<script>
+const NS='http://www.w3.org/2000/svg',g=document.getElementById('g');
+let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+const el=(n,a,p=g)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+const C='#C9D2E0',CL='#F1F4F9',P4='#B692F6',P6='#7F56D9',P3='#D6BBFB',INK='#06070A';
+const defs=el('defs',{});
+defs.innerHTML=`<radialGradient id="cg"><stop offset="0" stop-color="${P6}" stop-opacity=".42"/><stop offset=".5" stop-color="${P6}" stop-opacity=".09"/><stop offset="1" stop-color="${P6}" stop-opacity="0"/></radialGradient>
+<radialGradient id="ng"><stop offset="0" stop-color="${CL}" stop-opacity=".8"/><stop offset="1" stop-color="${CL}" stop-opacity="0"/></radialGradient>
+<radialGradient id="wg"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".25" stop-color="${P3}" stop-opacity=".8"/><stop offset="1" stop-color="${P6}" stop-opacity="0"/></radialGradient>
+<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2438"/><stop offset=".5" stop-color="#16131F"/><stop offset="1" stop-color="#0C0A12"/></linearGradient>`;
+const cx=1190,cy=200,SY=0.62;
+for(let i=0;i<14;i++){const R=70+i*30;el('ellipse',{cx,cy,rx:R,ry:R*SY,fill:'none',stroke:C,'stroke-opacity':(0.12*(1-i/14)).toFixed(3),'stroke-width':.7});}
+for(let i=0;i<180;i++){const a=i/180*Math.PI*2,R0=70,R1=420;el('line',{x1:cx+Math.cos(a)*R0,y1:cy+Math.sin(a)*R0*SY,x2:cx+Math.cos(a)*R1,y2:cy+Math.sin(a)*R1*SY,stroke:C,'stroke-opacity':.03,'stroke-width':.6});}
+const rings=[[160,12],[250,18],[350,26]];const nodes=[];
+rings.forEach(([R,n],ri)=>{for(let i=0;i<n;i++){const a=(i+r()*.5)/n*Math.PI*2+ri*.3;const x=cx+Math.cos(a)*R,y=cy+Math.sin(a)*R*SY;if(y<14||y>386||x>1586||x<760)continue;nodes.push({x,y,lit:r()<.3,ri});}});
+const EM=(n)=>{const a=Math.atan2(n.y-cy,n.x-cx);const k=Math.round(a/(Math.PI/3));const fa=k*Math.PI/3;return [cx+Math.cos(fa)*44,cy+Math.sin(fa)*44];};
+for(const n of nodes){const [ox,oy]=EM(n);const mx=(ox+n.x)/2+(n.y-oy)*.12,my=(oy+n.y)/2-(n.x-ox)*.12*SY;
+ el('path',{d:`M${ox},${oy} Q${mx},${my} ${n.x},${n.y}`,fill:'none',stroke:n.lit?CL:C,'stroke-opacity':n.lit?.7:.13,'stroke-width':n.lit?1.1:.6});}
+for(const n of nodes){ if(n.lit)el('circle',{cx:n.x,cy:n.y,r:14,fill:'url(#ng)','fill-opacity':.4});
+ el('rect',{x:n.x-3.5,y:n.y-3.5,width:7,height:7,rx:1.5,fill:n.lit?CL:INK,stroke:C,'stroke-opacity':n.lit?1:.5,'stroke-width':1});}
+el('ellipse',{cx,cy,rx:190,ry:140,fill:'url(#cg)'});
+
+const R=58;const pt=(i,rr)=>[cx+Math.cos(i*Math.PI/3+Math.PI/6)*rr,cy+Math.sin(i*Math.PI/3+Math.PI/6)*rr];
+const shades=['#2A2438','#1E1A2A','#141120','#0E0C16','#181425','#231E31'];
+for(let i=0;i<6;i++){const a=pt(i,R),b=pt(i+1,R);el('path',{d:`M${cx},${cy} L${a[0]},${a[1]} L${b[0]},${b[1]} Z`,fill:shades[i],stroke:P4,'stroke-opacity':.35,'stroke-width':.8});}
+el('polygon',{points:[0,1,2,3,4,5].map(i=>pt(i,R).join(',')).join(' '),fill:'none',stroke:P4,'stroke-width':1.6});
+el('polygon',{points:[0,1,2,3,4,5].map(i=>pt(i,R+12).join(',')).join(' '),fill:'none',stroke:P4,'stroke-opacity':.25,'stroke-width':.8});
+el('polygon',{points:[0,1,2,3,4,5].map(i=>pt(i,26).join(',')).join(' '),fill:'#0A0810',stroke:P3,'stroke-opacity':.7,'stroke-width':1});
+el('circle',{cx,cy,r:30,fill:'url(#wg)'});
+el('circle',{cx,cy,r:5,fill:'#fff'});
+
+</script>
+</body></html>

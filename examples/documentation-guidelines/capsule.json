@@ -1,0 +1,17 @@
+{
+  "id": "surfaces/documentation-guidelines",
+  "version": "1.0.1",
+  "kind": "guidelines",
+  "trigger": "Use when writing, changing or reviewing Markdown documentation for any reader.",
+  "scope": {
+    "includes": [
+      "accuracy of behaviour, status and prerequisites"
+    ],
+    "excludes": [
+      "audience-specific contracts for developers, agent instructions and consumers"
+    ]
+  },
+  "contents": {
+    "canonical": "canonical.md"
+  }
+}

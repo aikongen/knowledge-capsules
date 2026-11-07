@@ -1,0 +1,422 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-capsules.local/schemas/0.1/profile.schema.json",
+  "title": "Knowledge Capsule Profile v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "profileId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "authority": {
+      "enum": [
+        "unknown",
+        "low",
+        "medium",
+        "high",
+        "primary"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "title",
+    "description",
+    "applicability",
+    "sourcePolicy",
+    "freshnessPolicy",
+    "evidencePolicy",
+    "workflow",
+    "reviewPolicy",
+    "evaluationPolicy",
+    "resolver",
+    "contextBudgets"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "id": {
+      "$ref": "#/$defs/profileId"
+    },
+    "version": {
+      "$ref": "#/$defs/semver"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "knowledgeDomains",
+        "defaultAudiences"
+      ],
+      "properties": {
+        "knowledgeDomains": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "defaultAudiences": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "sourcePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requireOriginalWhereAvailable",
+        "allowUnverifiedAsCanonical",
+        "authorityRules"
+      ],
+      "properties": {
+        "requireOriginalWhereAvailable": {
+          "type": "boolean"
+        },
+        "allowUnverifiedAsCanonical": {
+          "type": "boolean"
+        },
+        "authorityRules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceKinds",
+              "authority"
+            ],
+            "properties": {
+              "sourceKinds": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "authority": {
+                "$ref": "#/$defs/authority"
+              },
+              "preferred": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "blockedSourceKinds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "freshnessPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultPolicy",
+        "updateTriggers",
+        "itemLevelAssessment"
+      ],
+      "properties": {
+        "defaultPolicy": {
+          "enum": [
+            "manual",
+            "max_age",
+            "source_version",
+            "effective_date",
+            "custom"
+          ]
+        },
+        "defaultMaxAgeDays": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "updateTriggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "itemLevelAssessment": {
+          "type": "boolean"
+        }
+      }
+    },
+    "evidencePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimumVerifiedEvidencePerMaterialItem",
+        "permitSingleSource",
+        "requireContradictionSearch",
+        "criticalClaimRules"
+      ],
+      "properties": {
+        "minimumVerifiedEvidencePerMaterialItem": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "permitSingleSource": {
+          "type": "boolean"
+        },
+        "requireContradictionSearch": {
+          "type": "boolean"
+        },
+        "criticalClaimRules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "claimCategory",
+              "requirements"
+            ],
+            "properties": {
+              "claimCategory": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requirements": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredStages",
+        "maxConcurrentScouts",
+        "resumeAtStageBoundaries"
+      ],
+      "properties": {
+        "requiredStages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "scope",
+              "resolve_existing",
+              "ingest_supplied",
+              "gap_map",
+              "research",
+              "source_verification",
+              "extraction",
+              "synthesis",
+              "challenge",
+              "evaluation",
+              "approval"
+            ]
+          }
+        },
+        "maxConcurrentScouts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "resumeAtStageBoundaries": {
+          "type": "boolean"
+        },
+        "fullReplicationAllowed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "reviewPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independentReviewRequired",
+        "freshContextRequired",
+        "ownerApprovalRequired"
+      ],
+      "properties": {
+        "independentReviewRequired": {
+          "type": "boolean"
+        },
+        "freshContextRequired": {
+          "type": "boolean"
+        },
+        "crossHarnessPreferred": {
+          "type": "boolean"
+        },
+        "ownerApprovalRequired": {
+          "type": "boolean"
+        },
+        "minimumReviewers": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "evaluationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "minimumQuestions",
+        "executableChecksPreferred"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "minimumQuestions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "executableChecksPreferred": {
+          "type": "boolean"
+        },
+        "regressionFixturesRequired": {
+          "type": "boolean"
+        }
+      }
+    },
+    "resolver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "weights",
+        "hardExclusionsOverrideScore"
+      ],
+      "properties": {
+        "weights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metadata",
+            "lexical",
+            "applicability",
+            "trust",
+            "freshness"
+          ],
+          "properties": {
+            "metadata": {
+              "type": "number",
+              "minimum": 0
+            },
+            "lexical": {
+              "type": "number",
+              "minimum": 0
+            },
+            "applicability": {
+              "type": "number",
+              "minimum": 0
+            },
+            "trust": {
+              "type": "number",
+              "minimum": 0
+            },
+            "freshness": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "hardExclusionsOverrideScore": {
+          "type": "boolean"
+        },
+        "minimumUsableScore": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "contextBudgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "brief",
+        "standard",
+        "deep"
+      ],
+      "properties": {
+        "brief": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "standard": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deep": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "rightsPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultRedistribution": {
+          "enum": [
+            "allowed",
+            "excerpt_only",
+            "reference_only",
+            "prohibited",
+            "unknown"
+          ]
+        },
+        "requireLicenseAssessment": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

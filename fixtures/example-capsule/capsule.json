@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "0.1",
+  "kind": "research",
+  "trigger": "Use when testing capsule import, evidence linkage and retrieval.",
+  "id": "engineering/electron-local-baseline-fixture",
+  "version": "0.1.0",
+  "status": "draft",
+  "title": "Electron Local Application Baseline — Illustrative Fixture",
+  "summary": "A deliberately small fixture used to test capsule import, evidence linkage, retrieval, and research update flows. It is not the complete Electron production capsule.",
+  "profile": {
+    "id": "software-engineering",
+    "version": "0.1.0"
+  },
+  "classification": "public",
+  "maintainers": [
+    {
+      "id": "owner:example",
+      "displayName": "Example Maintainer",
+      "role": "owner"
+    }
+  ],
+  "scope": {
+    "audiences": [
+      "software-engineers",
+      "ai-coding-agents"
+    ],
+    "platforms": [
+      "macos",
+      "windows",
+      "linux"
+    ],
+    "technologies": {
+      "electron": ">=44 <45"
+    },
+    "contexts": {
+      "applicationType": "local-first-desktop"
+    },
+    "includes": [
+      "renderer isolation",
+      "sandboxing",
+      "IPC exposure boundary"
+    ],
+    "excludes": [
+      "packaging",
+      "auto-update",
+      "code signing",
+      "server mode"
+    ],
+    "assumptions": [
+      "The application loads only controlled local UI content."
+    ],
+    "validFrom": "2026-08-31"
+  },
+  "freshness": {
+    "assessedAt": "2026-08-31T16:00:00Z",
+    "policy": "source_version",
+    "updateTriggers": [
+      "new Electron major release",
+      "material Electron security guidance change"
+    ],
+    "notes": "Fixture should be revalidated before production use."
+  },
+  "contents": {
+    "canonical": "canonical.md",
+    "scope": "scope.json",
+    "knowledgeItems": "knowledge/items.jsonl",
+    "sources": "sources/index.jsonl",
+    "evidence": "evidence/index.jsonl",
+    "evaluations": "evaluations/manifest.json",
+    "provenance": "provenance/build.json",
+    "changelog": "changelog.md",
+    "patterns": [
+      "patterns/secure-renderer-boundary.md"
+    ],
+    "examples": [],
+    "checks": [
+      "checks/README.md"
+    ],
+    "attachments": [],
+    "provenanceLedger": "provenance/ledger.jsonl"
+  },
+  "inventory": {
+    "knowledgeItems": 3,
+    "sources": 1,
+    "evidence": 3,
+    "checks": 1,
+    "evaluations": 1
+  },
+  "dependencies": [],
+  "provenance": {
+    "createdAt": "2026-08-31T16:00:00Z",
+    "createdBy": [
+      "starter-pack-author"
+    ],
+    "buildRunId": "run-fixture-electron-001",
+    "researchStartedAt": "2026-08-31T15:30:00Z",
+    "researchCompletedAt": "2026-08-31T16:00:00Z"
+  },
+  "evaluationSummary": {
+    "status": "not_run",
+    "passed": 0,
+    "failed": 0,
+    "skipped": 1
+  },
+  "minimumResolverVersion": "0.1.0"
+}

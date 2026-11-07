@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1",
+  "runId": "run-fixture-electron-001",
+  "purpose": "starter pack fixture",
+  "createdAt": "2026-08-31T16:00:00Z",
+  "agents": [
+    {
+      "id": "starter-pack-author",
+      "role": "author"
+    }
+  ],
+  "sourceIds": [
+    "src-electron-security"
+  ],
+  "notes": [
+    "Replace the placeholder acquired-content digest during real implementation."
+  ]
+}

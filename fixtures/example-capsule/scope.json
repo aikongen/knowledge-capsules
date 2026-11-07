@@ -1,0 +1,32 @@
+{
+  "audiences": [
+    "software-engineers",
+    "ai-coding-agents"
+  ],
+  "platforms": [
+    "macos",
+    "windows",
+    "linux"
+  ],
+  "technologies": {
+    "electron": ">=44 <45"
+  },
+  "contexts": {
+    "applicationType": "local-first-desktop"
+  },
+  "includes": [
+    "renderer isolation",
+    "sandboxing",
+    "IPC exposure boundary"
+  ],
+  "excludes": [
+    "packaging",
+    "auto-update",
+    "code signing",
+    "server mode"
+  ],
+  "assumptions": [
+    "The application loads only controlled local UI content."
+  ],
+  "validFrom": "2026-08-31"
+}

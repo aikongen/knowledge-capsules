@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://knowledge-capsules.local/schemas/0.1/source-acquisition.schema.json",
+  "title": "Source Acquisition Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z$"
+    },
+    "localId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "filePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    }
+  },
+  "required": [
+    "id",
+    "requestedAt",
+    "kind",
+    "locator",
+    "policy",
+    "outcome"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/localId"
+    },
+    "researchRunId": {
+      "$ref": "#/$defs/localId"
+    },
+    "candidateId": {
+      "$ref": "#/$defs/localId"
+    },
+    "requestedAt": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "kind": {
+      "enum": [
+        "http",
+        "file",
+        "git"
+      ]
+    },
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "type": "string"
+        },
+        "subpath": {
+          "type": "string"
+        }
+      },
+      "minProperties": 1
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedSchemes",
+        "allowPrivateNetwork",
+        "maxRedirects",
+        "maxBytes",
+        "timeoutMs"
+      ],
+      "properties": {
+        "allowedSchemes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "https",
+              "http",
+              "file",
+              "git"
+            ]
+          }
+        },
+        "allowPrivateNetwork": {
+          "type": "boolean"
+        },
+        "maxRedirects": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "maxBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allowedMimeTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classification": {
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "completedAt",
+        "redirectCount"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "retrieved",
+            "blocked",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "completedAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "redirectCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finalUri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "httpStatus": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "mimeType": {
+          "type": "string"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "contentDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "localArtifactPath": {
+          "$ref": "#/$defs/filePath"
+        },
+        "sourceId": {
+          "$ref": "#/$defs/localId"
+        },
+        "stableLocator": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commit": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "lineStart": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "lineEnd": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "section": {
+              "type": "string"
+            },
+            "selector": {
+              "type": "string"
+            }
+          },
+          "minProperties": 1
+        },
+        "blockReason": {
+          "enum": [
+            "scheme_not_allowed",
+            "private_network_denied",
+            "redirect_policy",
+            "size_limit",
+            "mime_denied",
+            "path_denied",
+            "license_policy",
+            "classification_policy",
+            "other"
+          ]
+        },
+        "errorCode": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
