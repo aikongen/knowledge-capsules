@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { cp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import { DESIGN, DOCS, REPO, kc, publishedDigest, sandbox, variant, type Sandbox } from "./helpers.ts";
+import { DESIGN, DOCS, ENTRY, REPO, kc, publishedDigest, sandbox, variant, type Sandbox } from "./helpers.ts";
 
 const boxes: Sandbox[] = [];
 async function fresh(): Promise<Sandbox> {
@@ -84,6 +84,39 @@ describe("publish", () => {
     expect(result.code).toBe(1);
     expect(result.err).toContain('raise "version" in capsule.json and publish again');
     expect(await treeHash(stored)).toBe(before);
+  });
+
+  test("two concurrent first publishes of one folder store one version and both succeed", async () => {
+    const box = await fresh();
+    await kc(box, ["init"]);
+    const dir = await variant(box, DESIGN, "concurrent", "1.3.0");
+    const path = join(dir, "capsule.json");
+    const manifest = JSON.parse(await readFile(path, "utf8")) as Record<string, unknown>;
+    for (const key of ["digest", "publishedAt", "status"]) delete manifest[key];
+    await writeFile(path, `${JSON.stringify(manifest, null, 2)}\n`);
+    // Two real processes: the write guard blocks its own thread while waiting, so
+    // in-process calls could not overlap.
+    const spawn = async () => {
+      const proc = Bun.spawn(["bun", ENTRY, "publish", dir], {
+        cwd: box.project,
+        env: { ...process.env, KC_VAULT: box.vault, HOME: box.home },
+        stdout: "pipe",
+        stderr: "pipe",
+      });
+      const [out, err, code] = await Promise.all([new Response(proc.stdout).text(), new Response(proc.stderr).text(), proc.exited]);
+      return { out: out.trim(), err, code };
+    };
+    const results = await Promise.all([spawn(), spawn()]);
+    for (const r of results) {
+      expect(r.err).toBe("");
+      expect(r.code).toBe(0);
+    }
+    const outs = results.map((r) => r.out).sort();
+    expect(outs.filter((o) => o.startsWith("published surfaces/design-guidelines@1.3.0")).length).toBe(1);
+    expect(outs.filter((o) => o.includes("is already in the vault, unchanged")).length).toBe(1);
+    const versions = await readdir(join(box.vault, "capsules/surfaces/design-guidelines/versions"));
+    expect(versions.filter((v) => v === "1.3.0")).toEqual(["1.3.0"]);
+    expect((await kc(box, ["status"])).out).toContain("versions: 1");
   });
 
   test("a new version is a separate immutable entry", async () => {

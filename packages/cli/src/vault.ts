@@ -200,7 +200,15 @@ export class Vault {
       status: "published",
       publishedAt: String(manifest.publishedAt),
     };
-    return this.withWriteLease(async () => {
+    return this.withWriteLease(() => this.storeLocked(record, pkg));
+  }
+
+  /** The write of store(); the caller already holds the write guard. */
+  private async storeLocked(
+    record: VersionRecord,
+    pkg: CapsulePackage,
+  ): Promise<{ record: VersionRecord; created: boolean }> {
+    {
       const registry = await this.readRegistry(record.id);
       const next = registerPublishedVersion(registry, {
         version: record.version,
@@ -228,7 +236,7 @@ export class Vault {
       must(await writeJsonAtomic(this.registryPath(record.id), next));
       await this.rebuildIndex();
       return { record, created: true };
-    });
+    }
   }
 
   /**
@@ -247,40 +255,55 @@ export class Vault {
         `--version ${expectVersion} does not match version ${draft.version} in ${folder}/capsule.json; change capsule.json or the option`,
       );
     }
-    const prior = (await this.versions(draft.id)).find((v) => v.version === draft.version);
-    const publishedAt = prior?.publishedAt ?? draft.publishedAt ?? new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
-    const { digest: _d, ...rest } = draft;
-    const withStatus = (status: string, digest?: string) => ({
-      ...rest,
-      status,
-      publishedAt,
-      ...(digest === undefined ? {} : { digest }),
-    });
-    const pack = (manifest: object): CapsulePackage => {
-      const entries = new Map(source.entries);
-      entries.set(MANIFEST_PATH, new TextEncoder().encode(`${JSON.stringify(manifest, null, 2)}\n`));
-      return { entries };
-    };
-    const first = assertCapsulePackage(pack(withStatus("draft")), {
-      minimumVerifiedEvidencePerMaterialItem: 0,
-      mode: "publication",
-      requireDigest: false,
-    });
-    if (draft.digest !== undefined) {
-      const own = draft.publishedAt === undefined || draft.publishedAt === publishedAt
-        ? first.digest
-        : assertCapsulePackage(pack({ ...withStatus("draft"), publishedAt: draft.publishedAt }), {
-            minimumVerifiedEvidencePerMaterialItem: 0,
-            mode: "publication",
-            requireDigest: false,
-          }).digest;
-      if (draft.digest !== own) {
-        throw new KcError("digest_mismatch", "capsule.json digest does not match the files; remove it and publish again");
+    // Timestamp and digest are chosen while holding the write guard, so a concurrent
+    // first publish of the same folder sees the earlier publishedAt and is a no-op.
+    return this.withWriteLease(async () => {
+      const prior = (await this.versions(draft.id)).find((v) => v.version === draft.version);
+      const publishedAt = prior?.publishedAt ?? draft.publishedAt ?? new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+      const { digest: _d, ...rest } = draft;
+      const withStatus = (status: string, digest?: string) => ({
+        ...rest,
+        status,
+        publishedAt,
+        ...(digest === undefined ? {} : { digest }),
+      });
+      const pack = (manifest: object): CapsulePackage => {
+        const entries = new Map(source.entries);
+        entries.set(MANIFEST_PATH, new TextEncoder().encode(`${JSON.stringify(manifest, null, 2)}\n`));
+        return { entries };
+      };
+      const first = assertCapsulePackage(pack(withStatus("draft")), {
+        minimumVerifiedEvidencePerMaterialItem: 0,
+        mode: "publication",
+        requireDigest: false,
+      });
+      if (draft.digest !== undefined) {
+        const own = draft.publishedAt === undefined || draft.publishedAt === publishedAt
+          ? first.digest
+          : assertCapsulePackage(pack({ ...withStatus("draft"), publishedAt: draft.publishedAt }), {
+              minimumVerifiedEvidencePerMaterialItem: 0,
+              mode: "publication",
+              requireDigest: false,
+            }).digest;
+        if (draft.digest !== own) {
+          throw new KcError("digest_mismatch", "capsule.json digest does not match the files; remove it and publish again");
+        }
       }
-    }
-    const published = pack(withStatus("published", first.digest));
-    assertCapsulePackage(published, { minimumVerifiedEvidencePerMaterialItem: 0, mode: "publication" });
-    return this.store(published);
+      const published = pack(withStatus("published", first.digest));
+      assertCapsulePackage(published, { minimumVerifiedEvidencePerMaterialItem: 0, mode: "publication" });
+      const validation = assertCapsulePackage(published, { minimumVerifiedEvidencePerMaterialItem: 0, mode: "import" });
+      const manifest = validation.manifest;
+      return this.storeLocked(
+        {
+          id: manifest.id,
+          version: manifest.version,
+          digest: String(manifest.digest),
+          status: "published",
+          publishedAt: String(manifest.publishedAt),
+        },
+        published,
+      );
+    });
   }
 
   /** Portable zip of one stored version. */
