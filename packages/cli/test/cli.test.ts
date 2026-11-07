@@ -265,22 +265,22 @@ describe("connect", () => {
       "claude-code": {
         file: join(box.project, ".mcp.json"),
         shown: "claude-code can now find your capsules (.mcp.json)",
-        check: (t) => expect(JSON.parse(t)).toEqual({ mcpServers: { kc: { command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } } } }),
+        check: (t) => expect(JSON.parse(t)).toEqual({ mcpServers: { KnowledgeCapsules: { command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } } } }),
       },
       codex: {
         file: join(box.home, ".codex", "config.toml"),
         shown: "codex can now find your capsules in every repository (~/.codex/config.toml)",
-        check: (t) => expect(Bun.TOML.parse(t)).toEqual({ mcp_servers: { kc: { command: "/opt/kc/kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } } } }),
+        check: (t) => expect(Bun.TOML.parse(t)).toEqual({ mcp_servers: { KnowledgeCapsules: { command: "/opt/kc/kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } } } }),
       },
       opencode: {
         file: join(box.project, "opencode.json"),
         shown: "opencode can now find your capsules (opencode.json)",
-        check: (t) => expect(JSON.parse(t)).toEqual({ $schema: "https://opencode.ai/config.json", mcp: { servers: { kc: { type: "local", command: ["/opt/kc/kc", "mcp"], codemode: false, environment: { KC_VAULT: box.vault } } } } }),
+        check: (t) => expect(JSON.parse(t)).toEqual({ $schema: "https://opencode.ai/config.json", mcp: { servers: { KnowledgeCapsules: { type: "local", command: ["/opt/kc/kc", "mcp"], codemode: false, environment: { KC_VAULT: box.vault } } } } }),
       },
       pi: {
         file: join(box.project, ".pi", "mcp.json"),
         shown: "pi can now find your capsules (.pi/mcp.json)",
-        check: (t) => expect(JSON.parse(t)).toEqual({ mcpServers: { kc: { command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } } } }),
+        check: (t) => expect(JSON.parse(t)).toEqual({ mcpServers: { KnowledgeCapsules: { command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } } } }),
       },
     };
     for (const [target, { file, shown, check }] of Object.entries(expectations)) {
@@ -301,12 +301,12 @@ describe("connect", () => {
     const box = await fresh();
     const onPath = await kc(box, ["connect", "claude-code"], { onPath: "/opt/kc/kc" });
     expect(onPath.out).not.toContain("PATH");
-    const read = async () => JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")) as { mcpServers: { kc: unknown } };
-    expect((await read()).mcpServers.kc).toEqual({ command: "kc", args: ["mcp"], env: { KC_VAULT: box.vault } });
+    const read = async () => JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")) as { mcpServers: { KnowledgeCapsules: unknown } };
+    expect((await read()).mcpServers.KnowledgeCapsules).toEqual({ command: "kc", args: ["mcp"], env: { KC_VAULT: box.vault } });
 
     const elsewhere = await kc(box, ["connect", "claude-code"], { onPath: "/other/bin/kc" });
     expect(elsewhere.out).toContain("kc is not on your PATH");
-    expect((await read()).mcpServers.kc).toEqual({ command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } });
+    expect((await read()).mcpServers.KnowledgeCapsules).toEqual({ command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } });
 
     const none = await kc(box, ["connect", "claude-code"]);
     expect(none.out).toContain("run kc connect again if you move it");
@@ -321,23 +321,23 @@ describe("connect", () => {
       out: (l) => lines.push(l), err: (l) => lines.push(l),
     });
     expect(bare).toBe(0);
-    expect(JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8"))).toEqual({ mcpServers: { kc: { command: "kc", args: ["mcp"] } } });
+    expect(JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8"))).toEqual({ mcpServers: { KnowledgeCapsules: { command: "kc", args: ["mcp"] } } });
 
     for (const target of ["codex", "opencode", "pi"]) await kc(box, ["connect", target], { onPath: "/opt/kc/kc" });
     expect(Bun.TOML.parse(await readFile(join(box.home, ".codex", "config.toml"), "utf8"))).toEqual({
-      mcp_servers: { kc: { command: "kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } } },
+      mcp_servers: { KnowledgeCapsules: { command: "kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } } },
     });
     expect(JSON.parse(await readFile(join(box.project, "opencode.json"), "utf8"))).toEqual({
       $schema: "https://opencode.ai/config.json",
-      mcp: { servers: { kc: { type: "local", command: ["kc", "mcp"], codemode: false, environment: { KC_VAULT: box.vault } } } },
+      mcp: { servers: { KnowledgeCapsules: { type: "local", command: ["kc", "mcp"], codemode: false, environment: { KC_VAULT: box.vault } } } },
     });
     expect(JSON.parse(await readFile(join(box.project, ".pi", "mcp.json"), "utf8"))).toEqual({
-      mcpServers: { kc: { command: "kc", args: ["mcp"], env: { KC_VAULT: box.vault } } },
+      mcpServers: { KnowledgeCapsules: { command: "kc", args: ["mcp"], env: { KC_VAULT: box.vault } } },
     });
 
     const source = await kc(box, ["connect", "claude-code"], { compiled: false });
     expect(source.out).toContain("running from source");
-    expect(JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")).mcpServers.kc).toEqual({
+    expect(JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")).mcpServers.KnowledgeCapsules).toEqual({
       command: "/usr/bin/bun", args: ["/src/main.ts", "mcp"], env: { KC_VAULT: box.vault },
     });
   });
@@ -353,19 +353,36 @@ describe("connect", () => {
     await kc(box, ["connect", "codex"]);
     const parsed = Bun.TOML.parse(await readFile(join(box.home, ".codex", "config.toml"), "utf8")) as Record<string, any>;
     expect(parsed["model"]).toBe("x");
-    expect(parsed["mcp_servers"].kc).toEqual({ command: "/opt/kc/kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } });
+    expect(parsed["mcp_servers"].KnowledgeCapsules).toEqual({ command: "/opt/kc/kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } });
     expect(parsed["mcp_servers"].other).toEqual({ command: "o" });
     await writeFile(join(box.project, ".mcp.json"), JSON.stringify({ mcpServers: { keep: { command: "k" } } }));
     await kc(box, ["connect", "claude-code"]);
     const json = JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")) as { mcpServers: Record<string, unknown> };
-    expect(Object.keys(json.mcpServers).sort()).toEqual(["kc", "keep"]);
+    expect(Object.keys(json.mcpServers).sort()).toEqual(["KnowledgeCapsules", "keep"]);
+  });
+
+  test("migrates an existing kc entry to KnowledgeCapsules in every format", async () => {
+    const box = await fresh();
+    const { mkdir } = await import("node:fs/promises");
+    await mkdir(box.project, { recursive: true });
+    await writeFile(join(box.project, ".mcp.json"), JSON.stringify({ mcpServers: { kc: { command: "kc", args: ["mcp"] }, keep: { command: "k" } } }));
+    await writeFile(join(box.project, "opencode.json"), JSON.stringify({ mcp: { servers: { kc: { type: "local", command: ["kc", "mcp"] } } } }));
+    await mkdir(join(box.home, ".codex"), { recursive: true });
+    await writeFile(join(box.home, ".codex", "config.toml"), 'model = "x"\n\n[mcp_servers.kc]\ncommand = "old"\n\n[mcp_servers.kc.env]\nA = "1"\n\n[mcp_servers.other]\ncommand = "o"\n');
+    for (const target of ["claude-code", "opencode", "codex"]) await kc(box, ["connect", target], { onPath: "/opt/kc/kc" });
+    const json = JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")) as { mcpServers: Record<string, unknown> };
+    expect(Object.keys(json.mcpServers).sort()).toEqual(["KnowledgeCapsules", "keep"]);
+    const oc = JSON.parse(await readFile(join(box.project, "opencode.json"), "utf8")) as { mcp: { servers: Record<string, unknown> } };
+    expect(Object.keys(oc.mcp.servers)).toEqual(["KnowledgeCapsules"]);
+    const toml = Bun.TOML.parse(await readFile(join(box.home, ".codex", "config.toml"), "utf8")) as Record<string, any>;
+    expect(Object.keys(toml["mcp_servers"]).sort()).toEqual(["KnowledgeCapsules", "other"]);
   });
 
   test("codex honours CODEX_HOME", async () => {
     const box = await fresh();
     const codexHome = join(box.root, "codex-work");
     await kc(box, ["connect", "codex"], { env: { CODEX_HOME: codexHome } });
-    expect((Bun.TOML.parse(await readFile(join(codexHome, "config.toml"), "utf8")) as Record<string, any>)["mcp_servers"].kc.command).toBe("/opt/kc/kc");
+    expect((Bun.TOML.parse(await readFile(join(codexHome, "config.toml"), "utf8")) as Record<string, any>)["mcp_servers"].KnowledgeCapsules.command).toBe("/opt/kc/kc");
     await expect(readFile(join(box.home, ".codex", "config.toml"), "utf8")).rejects.toThrow();
   });
 

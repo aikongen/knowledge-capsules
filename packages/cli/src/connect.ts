@@ -8,7 +8,9 @@ import { writeFileAtomic } from "@kc/storage";
 export const CONNECT_TARGETS = ["claude-code", "codex", "opencode", "pi"] as const;
 export type ConnectTarget = (typeof CONNECT_TARGETS)[number];
 
-const SERVER_NAME = "kc";
+const SERVER_NAME = "KnowledgeCapsules";
+/** The name connect wrote before 0.1.0-preview.8; an existing entry under it is migrated. */
+const LEGACY_NAME = "kc";
 
 export interface StartEntry {
   readonly command: string;
@@ -86,6 +88,11 @@ function asObject(value: unknown): Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
 }
 
+function withoutLegacy(map: Record<string, unknown>): Record<string, unknown> {
+  const { [LEGACY_NAME]: _old, ...rest } = map;
+  return rest;
+}
+
 const tomlString = (s: string): string => JSON.stringify(s);
 
 export function codexBlock(command: string, args: readonly string[], env: Readonly<Record<string, string>> = {}): string {
@@ -96,9 +103,24 @@ export function codexBlock(command: string, args: readonly string[], env: Readon
     : `${table}\n[mcp_servers.${SERVER_NAME}.env]\n${entries.map(([k, v]) => `${k} = ${tomlString(v)}\n`).join("")}`;
 }
 
-/** Replace the `[mcp_servers.kc]` table (and its sub-tables) or append it; other content is kept byte for byte. */
+/** Drop the legacy `[mcp_servers.kc]` table and its sub-tables; other content is kept byte for byte. */
+export function removeLegacyCodexToml(existing: string): string {
+  const lines = existing.split("\n");
+  const legacy = (t: string): boolean => t === `[mcp_servers.${LEGACY_NAME}]` || t.startsWith(`[mcp_servers.${LEGACY_NAME}.`);
+  const out: string[] = [];
+  let skipping = false;
+  for (const line of lines) {
+    const t = line.trim();
+    if (t.startsWith("[")) skipping = legacy(t);
+    if (!skipping) out.push(line);
+  }
+  return out.join("\n").replace(/\n{3,}/g, "\n\n");
+}
+
+/** Replace the `[mcp_servers.KnowledgeCapsules]` table (and its sub-tables) or append it; other content is kept byte for byte. */
 export function upsertCodexToml(existing: string, command: string, args: readonly string[], env: Readonly<Record<string, string>> = {}): string {
   const block = codexBlock(command, args, env);
+  existing = removeLegacyCodexToml(existing);
   const lines = existing.split("\n");
   const own = (line: string): boolean => {
     const t = line.trim();
@@ -128,24 +150,24 @@ export async function connect(
     case "claude-code": {
       const path = join(where.project, ".mcp.json");
       const json = await readJson(path);
-      json["mcpServers"] = { ...asObject(json["mcpServers"]), [SERVER_NAME]: { command: start.command, args: [...start.args], ...env } };
+      json["mcpServers"] = { ...withoutLegacy(asObject(json["mcpServers"])), [SERVER_NAME]: { command: start.command, args: [...start.args], ...env } };
       await write(path, `${JSON.stringify(json, null, 2)}\n`);
       return path;
     }
     case "pi": {
       const path = join(where.project, ".pi", "mcp.json");
       const json = await readJson(path);
-      json["mcpServers"] = { ...asObject(json["mcpServers"]), [SERVER_NAME]: { command: start.command, args: [...start.args], ...env } };
+      json["mcpServers"] = { ...withoutLegacy(asObject(json["mcpServers"])), [SERVER_NAME]: { command: start.command, args: [...start.args], ...env } };
       await write(path, `${JSON.stringify(json, null, 2)}\n`);
       return path;
     }
     case "opencode": {
-      // codemode:false exposes kc_list_capsules etc. as direct tools; with the default (true) OpenCode 2.x hides them behind a code interface the model failed to use.
+      // codemode:false exposes KnowledgeCapsules tools (list_capsules etc.) etc. as direct tools; with the default (true) OpenCode 2.x hides them behind a code interface the model failed to use.
       const path = join(where.project, "opencode.json");
       const json = await readJson(path);
       if (json["$schema"] === undefined) json["$schema"] = "https://opencode.ai/config.json";
       const mcp = asObject(json["mcp"]);
-      mcp["servers"] = { ...asObject(mcp["servers"]), [SERVER_NAME]: { type: "local", command: [start.command, ...start.args], codemode: false, ...(start.env === undefined ? {} : { environment: { ...start.env } }) } };
+      mcp["servers"] = { ...withoutLegacy(asObject(mcp["servers"])), [SERVER_NAME]: { type: "local", command: [start.command, ...start.args], codemode: false, ...(start.env === undefined ? {} : { environment: { ...start.env } }) } };
       json["mcp"] = mcp;
       await write(path, `${JSON.stringify(json, null, 2)}\n`);
       return path;

@@ -38,7 +38,7 @@ async function guard(work: () => Promise<Reply>): Promise<Reply> {
 }
 
 export function buildServer(vault: Vault, cwd: string): McpServer {
-  const server = new McpServer({ name: "kc", version: VERSION });
+  const server = new McpServer({ name: "KnowledgeCapsules", title: "KnowledgeCapsules", version: VERSION });
 
   server.registerTool(
     "list_capsules",

@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "kc": {
+    "KnowledgeCapsules": {
       "command": "kc",
       "args": [
         "mcp"

@@ -75,14 +75,14 @@ The note's text is `NOTE_TEXT` in `packages/cli/src/connect.ts`. The instruction
 - opencode, `AGENTS.md`: https://opencode.ai/docs/rules/
 - pi, `AGENTS.md`: https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent
 
-Once connected, `.mcp.json` holds an entry like `{ "mcpServers": { "kc": { "command": "kc", "args": ["mcp"] } } }`. When `$KC_VAULT` is set, it is written into the entry's environment (`env` in `.mcp.json`, `.pi/mcp.json` and Codex's `[mcp_servers.kc.env]`; `environment` in `opencode.json`).
+Once connected, `.mcp.json` holds an entry like `{ "mcpServers": { "KnowledgeCapsules": { "command": "kc", "args": ["mcp"] } } }`. When `$KC_VAULT` is set, it is written into the entry's environment (`env` in `.mcp.json`, `.pi/mcp.json` and Codex's `[mcp_servers.kc.env]`; `environment` in `opencode.json`).
 
 | Target | Shape | Source | Status |
 | --- | --- | --- | --- |
-| claude-code | `{"mcpServers":{"kc":{"command":"...","args":["mcp"],"env":{...}}}}` | https://code.claude.com/docs/en/mcp | verified |
-| codex | `[mcp_servers.kc]` with `command` and `args` | https://learn.chatgpt.com/docs/extend/mcp?surface=cli (was developers.openai.com/codex/mcp) | verified |
-| opencode | `{"$schema":"https://opencode.ai/config.json","mcp":{"servers":{"kc":{"type":"local","command":["...","mcp"],"environment":{...}}}}}` | https://opencode.ai/docs/mcp-servers/ (checked 2026-11-07: `mcp.servers.<name>`, `$schema` https://opencode.ai/config.json) | verified against the current docs |
-| pi | `{"mcpServers":{"kc":{"command":"...","args":["mcp"]}}}` | https://github.com/nicobailon/pi-mcp-adapter | unverified: pi needs the pi-mcp-adapter extension; not verified here. Pi has no built-in MCP |
+| claude-code | `{"mcpServers":{"KnowledgeCapsules":{"command":"...","args":["mcp"],"env":{...}}}}` | https://code.claude.com/docs/en/mcp | verified |
+| codex | `[mcp_servers.KnowledgeCapsules]` with `command` and `args` | https://learn.chatgpt.com/docs/extend/mcp?surface=cli (was developers.openai.com/codex/mcp) | verified |
+| opencode | `{"$schema":"https://opencode.ai/config.json","mcp":{"servers":{"KnowledgeCapsules":{"type":"local","command":["...","mcp"],"environment":{...}}}}}` | https://opencode.ai/docs/mcp-servers/ (checked 2026-11-07: `mcp.servers.<name>`, `$schema` https://opencode.ai/config.json) | verified against the current docs |
+| pi | `{"mcpServers":{"KnowledgeCapsules":{"command":"...","args":["mcp"]}}}` | https://github.com/nicobailon/pi-mcp-adapter | unverified: pi needs the pi-mcp-adapter extension; not verified here. Pi has no built-in MCP |
 
 Home is `$HOME` (`%USERPROFILE%` on Windows). A `opencode.json` or `.mcp.json` that is not a plain JSON object is refused rather than overwritten.
 
