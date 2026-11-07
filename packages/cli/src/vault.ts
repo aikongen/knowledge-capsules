@@ -67,7 +67,9 @@ async function exists(path: string): Promise<boolean> {
 
 export class Vault {
   readonly layout: VaultLayout;
-  constructor(root: string) {
+  private readonly now: () => Date;
+  constructor(root: string, now: () => Date = () => new Date()) {
+    this.now = now;
     this.layout = vaultLayout(root);
   }
 
@@ -259,7 +261,7 @@ export class Vault {
     // first publish of the same folder sees the earlier publishedAt and is a no-op.
     return this.withWriteLease(async () => {
       const prior = (await this.versions(draft.id)).find((v) => v.version === draft.version);
-      const publishedAt = prior?.publishedAt ?? draft.publishedAt ?? new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+      const publishedAt = prior?.publishedAt ?? draft.publishedAt ?? this.now().toISOString().replace(/\.\d{3}Z$/, "Z");
       const { digest: _d, ...rest } = draft;
       const withStatus = (status: string, digest?: string) => ({
         ...rest,
