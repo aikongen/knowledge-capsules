@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "0.1",
+  "capsules": [
+    {
+      "id": "surfaces/design-guidelines",
+      "version": "1.0.1",
+      "digest": "sha256:2a566e6eda6e324045edfff46a1a118053dc710dde0157ad960f86946bf683c7"
+    }
+  ]
+}
