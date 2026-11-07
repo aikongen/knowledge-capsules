@@ -237,12 +237,12 @@ describe("connect", () => {
       codex: {
         file: join(box.home, ".codex", "config.toml"),
         shown: "codex can now find your capsules in every repository (~/.codex/config.toml)",
-        check: (t) => expect(Bun.TOML.parse(t)).toEqual({ mcp_servers: { kc: { command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } } } }),
+        check: (t) => expect(Bun.TOML.parse(t)).toEqual({ mcp_servers: { kc: { command: "/opt/kc/kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } } } }),
       },
       opencode: {
         file: join(box.project, "opencode.json"),
         shown: "opencode can now find your capsules (opencode.json)",
-        check: (t) => expect(JSON.parse(t)).toEqual({ $schema: "https://opencode.ai/config.json", mcp: { servers: { kc: { type: "local", command: ["/opt/kc/kc", "mcp"], environment: { KC_VAULT: box.vault } } } } }),
+        check: (t) => expect(JSON.parse(t)).toEqual({ $schema: "https://opencode.ai/config.json", mcp: { servers: { kc: { type: "local", command: ["/opt/kc/kc", "mcp"], codemode: false, environment: { KC_VAULT: box.vault } } } } }),
       },
       pi: {
         file: join(box.project, ".pi", "mcp.json"),
@@ -292,11 +292,11 @@ describe("connect", () => {
 
     for (const target of ["codex", "opencode", "pi"]) await kc(box, ["connect", target], { onPath: "/opt/kc/kc" });
     expect(Bun.TOML.parse(await readFile(join(box.home, ".codex", "config.toml"), "utf8"))).toEqual({
-      mcp_servers: { kc: { command: "kc", args: ["mcp"], env: { KC_VAULT: box.vault } } },
+      mcp_servers: { kc: { command: "kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } } },
     });
     expect(JSON.parse(await readFile(join(box.project, "opencode.json"), "utf8"))).toEqual({
       $schema: "https://opencode.ai/config.json",
-      mcp: { servers: { kc: { type: "local", command: ["kc", "mcp"], environment: { KC_VAULT: box.vault } } } },
+      mcp: { servers: { kc: { type: "local", command: ["kc", "mcp"], codemode: false, environment: { KC_VAULT: box.vault } } } },
     });
     expect(JSON.parse(await readFile(join(box.project, ".pi", "mcp.json"), "utf8"))).toEqual({
       mcpServers: { kc: { command: "kc", args: ["mcp"], env: { KC_VAULT: box.vault } } },
@@ -320,12 +320,20 @@ describe("connect", () => {
     await kc(box, ["connect", "codex"]);
     const parsed = Bun.TOML.parse(await readFile(join(box.home, ".codex", "config.toml"), "utf8")) as Record<string, any>;
     expect(parsed["model"]).toBe("x");
-    expect(parsed["mcp_servers"].kc).toEqual({ command: "/opt/kc/kc", args: ["mcp"], env: { KC_VAULT: box.vault } });
+    expect(parsed["mcp_servers"].kc).toEqual({ command: "/opt/kc/kc", args: ["mcp"], default_tools_approval_mode: "approve", env: { KC_VAULT: box.vault } });
     expect(parsed["mcp_servers"].other).toEqual({ command: "o" });
     await writeFile(join(box.project, ".mcp.json"), JSON.stringify({ mcpServers: { keep: { command: "k" } } }));
     await kc(box, ["connect", "claude-code"]);
     const json = JSON.parse(await readFile(join(box.project, ".mcp.json"), "utf8")) as { mcpServers: Record<string, unknown> };
     expect(Object.keys(json.mcpServers).sort()).toEqual(["kc", "keep"]);
+  });
+
+  test("codex honours CODEX_HOME", async () => {
+    const box = await fresh();
+    const codexHome = join(box.root, "codex-work");
+    await kc(box, ["connect", "codex"], { env: { CODEX_HOME: codexHome } });
+    expect((Bun.TOML.parse(await readFile(join(codexHome, "config.toml"), "utf8")) as Record<string, any>)["mcp_servers"].kc.command).toBe("/opt/kc/kc");
+    await expect(readFile(join(box.home, ".codex", "config.toml"), "utf8")).rejects.toThrow();
   });
 
   test("leaves a marked note in CLAUDE.md or AGENTS.md, never twice, and --no-note skips it", async () => {

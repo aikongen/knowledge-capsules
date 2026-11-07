@@ -221,7 +221,7 @@ async function exec(io: Io, command: string, args: string[]): Promise<void> {
         throw new KcError("validation_failed", `unknown agent "${args[0]}"; use ${names}`);
       }
       const entry = startEntry(io.self, io.onPath?.("kc"), io.env["KC_VAULT"]);
-      const file = await connect(args[0] as ConnectTarget, { project: io.cwd, home: io.home }, entry.start);
+      const file = await connect(args[0] as ConnectTarget, { project: io.cwd, home: io.home, ...(io.env["CODEX_HOME"] ? { codexHome: io.env["CODEX_HOME"] } : {}) }, entry.start);
       io.out(
         args[0] === "codex"
           ? `codex can now find your capsules in every repository (${shownPath(file, io)})`

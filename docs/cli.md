@@ -44,7 +44,7 @@ To make a capsule folder, see [Make a capsule](capsule-format.md).
 | Agent | File | Where it applies |
 | --- | --- | --- |
 | claude-code | `.mcp.json` in the current directory | this repository |
-| codex | `~/.codex/config.toml` | every repository on this machine |
+| codex | `~/.codex/config.toml`, or `$CODEX_HOME/config.toml` when that is set | every repository on this machine |
 | opencode | `opencode.json` in the current directory | this repository |
 | pi | `.pi/mcp.json` in the current directory | this repository |
 

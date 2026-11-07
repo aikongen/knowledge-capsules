@@ -89,7 +89,7 @@ function asObject(value: unknown): Record<string, unknown> {
 const tomlString = (s: string): string => JSON.stringify(s);
 
 export function codexBlock(command: string, args: readonly string[], env: Readonly<Record<string, string>> = {}): string {
-  const table = `[mcp_servers.${SERVER_NAME}]\ncommand = ${tomlString(command)}\nargs = [${args.map(tomlString).join(", ")}]\n`;
+  const table = `[mcp_servers.${SERVER_NAME}]\ncommand = ${tomlString(command)}\nargs = [${args.map(tomlString).join(", ")}]\ndefault_tools_approval_mode = "approve"\n`;
   const entries = Object.entries(env);
   return entries.length === 0
     ? table
@@ -120,7 +120,7 @@ export function upsertCodexToml(existing: string, command: string, args: readonl
 /** Register `kc mcp` in the harness config. Returns the file changed. Idempotent. */
 export async function connect(
   target: ConnectTarget,
-  where: { project: string; home: string },
+  where: { project: string; home: string; codexHome?: string },
   start: StartEntry,
 ): Promise<string> {
   const env = start.env === undefined ? {} : { env: { ...start.env } };
@@ -140,17 +140,19 @@ export async function connect(
       return path;
     }
     case "opencode": {
+      // codemode:false exposes kc_list_capsules etc. as direct tools; with the default (true) OpenCode 2.x hides them behind a code interface the model failed to use.
       const path = join(where.project, "opencode.json");
       const json = await readJson(path);
       if (json["$schema"] === undefined) json["$schema"] = "https://opencode.ai/config.json";
       const mcp = asObject(json["mcp"]);
-      mcp["servers"] = { ...asObject(mcp["servers"]), [SERVER_NAME]: { type: "local", command: [start.command, ...start.args], ...(start.env === undefined ? {} : { environment: { ...start.env } }) } };
+      mcp["servers"] = { ...asObject(mcp["servers"]), [SERVER_NAME]: { type: "local", command: [start.command, ...start.args], codemode: false, ...(start.env === undefined ? {} : { environment: { ...start.env } }) } };
       json["mcp"] = mcp;
       await write(path, `${JSON.stringify(json, null, 2)}\n`);
       return path;
     }
     case "codex": {
-      const path = join(where.home, ".codex", "config.toml");
+      // Codex reads $CODEX_HOME/config.toml when CODEX_HOME is set (default ~/.codex).
+      const path = join(where.codexHome !== undefined && where.codexHome !== "" ? where.codexHome : join(where.home, ".codex"), "config.toml");
       await write(path, upsertCodexToml((await readText(path)) ?? "", start.command, start.args, start.env));
       return path;
     }
