@@ -4,10 +4,16 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ## Unreleased
 
+## 0.1.0-preview.8 - 2026-11-07
+
+### Changed
+
+- The MCP server is registered as `KnowledgeCapsules` (was `kc`); `kc connect` migrates existing entries.
+
 ### Fixed
 
 - `install.sh` replaces an installed `kc` as a new file; on macOS, copying over a running-before binary made the system stop it at start.
-- `kc publish` picks its timestamp and digest while holding the vault write guard, so two simultaneous first publishes of one folder end as one stored version instead of an `immutable_version` refusal.
+- `kc publish` takes the timestamp inside the write lock, and republishing identical content is a no-op, so two simultaneous first publishes of one folder end as one stored version instead of an `immutable_version` refusal.
 
 ## 0.1.0-preview.7 - 2026-11-07
 
