@@ -1,8 +1,8 @@
 {
   "id": "aikongen/capsule-writing-guidelines",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "guidelines",
-  "trigger": "Use when writing, changing or reviewing a knowledge capsule: its name, trigger line or content.",
+  "trigger": "Use when writing, changing or reviewing a knowledge capsule, its trigger line, its name or its content, even when the request only says make the agent follow these rules.",
   "scope": {
     "includes": [
       "what belongs in a capsule and what does not",
