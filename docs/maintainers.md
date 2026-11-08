@@ -97,25 +97,27 @@ Home is `$HOME` (`%USERPROFILE%` on Windows). A `opencode.json` or `.mcp.json` t
 
 ## Walkthrough (real binary)
 
-Binary: `kc`, 63 MB, macOS arm64. Temp vaults, `KC_VAULT` set per command.
+Binary: `kc` 0.1.0-preview.9, macOS arm64. Temp vaults, `KC_VAULT` set per command.
 
 ```
 $ kc init
 created the vault at .../w1
 $ kc publish examples/design-guidelines
-published aikongen/design-guidelines@1.1.0
+published aikongen/design-guidelines@1.3.0
+1 piece of advice; run kc check examples/design-guidelines
 $ kc publish examples/documentation-guidelines
-published aikongen/documentation-guidelines@1.1.0
+published aikongen/documentation-guidelines@1.2.0
+1 piece of advice; run kc check examples/documentation-guidelines
 $ kc status
 vault: .../w1
 capsules: 2, versions: 2
-$ kc export aikongen/design-guidelines@1.1.0 design.zip
-exported aikongen/design-guidelines@1.1.0 to .../design.zip
+$ kc export aikongen/design-guidelines@1.3.0 design.zip
+exported aikongen/design-guidelines@1.3.0 to .../design.zip
 $ KC_VAULT=w2 kc import design.zip
-imported aikongen/design-guidelines@1.1.0
+imported aikongen/design-guidelines@1.3.0
 ```
 
-The fingerprint after export and import is the one from `publish` (`sha256:bec437fe...ca7a17` for design-guidelines 1.0.1).
+The fingerprint after export and import is the one from `publish` (`sha256:0fb50a0b...fe5fcb` for design-guidelines 1.3.0).
 
 ## Records and decisions
 
@@ -129,10 +131,10 @@ The fingerprint after export and import is the one from `publish` (`sha256:bec43
 
 ## Cut a release
 
-Releases are built and uploaded from this Mac. No GitHub Actions.
+Releases are built and uploaded from this Mac. No GitHub Actions. Push main first: `--target main` tags the pushed main, and `KC_VERSION` is the version the binary reports (without it, `0.0.0-dev`).
 
 ```
-bun run build:all && mv dist/kc dist/kc-darwin-arm64 && (cd dist && shasum -a 256 kc-darwin-arm64 kc-linux-x64 kc-windows-x64.exe > SHA256SUMS) && gh release create vX.Y.Z --prerelease --title vX.Y.Z --notes "..." dist/kc-darwin-arm64 dist/kc-linux-x64 dist/kc-windows-x64.exe dist/SHA256SUMS
+KC_VERSION=X.Y.Z bun run build:all && mv dist/kc dist/kc-darwin-arm64 && (cd dist && shasum -a 256 kc-darwin-arm64 kc-linux-x64 kc-windows-x64.exe > SHA256SUMS) && gh release create vX.Y.Z --target main --prerelease --title vX.Y.Z --notes "..." dist/kc-darwin-arm64 dist/kc-linux-x64 dist/kc-windows-x64.exe dist/SHA256SUMS
 ```
 
 Drop `--prerelease` for a final release. The release has three binaries (`kc-darwin-arm64`, `kc-linux-x64`, `kc-windows-x64.exe`) and `SHA256SUMS`. `install.sh` (macOS, Linux) and `install.ps1` (Windows) download the latest release and check the SHA256. Public install line: `curl -fsSL https://raw.githubusercontent.com/aikongen/knowledge-capsules/main/install.sh | sh`. `install.ps1` has not been tested (no Windows machine).

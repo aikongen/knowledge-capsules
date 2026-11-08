@@ -1,6 +1,6 @@
 {
   "id": "aikongen/design-evidence-guidelines",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "guidelines",
   "trigger": "Use when judging, reviewing or accepting a screen, flow or journey from evidence, even when the request only asks whether it is done or good enough.",
   "scope": {

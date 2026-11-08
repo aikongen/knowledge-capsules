@@ -55,11 +55,11 @@ describe("publish", () => {
     const before = await treeHash(DESIGN);
     const first = await kc(box, ["publish", DESIGN]);
     expect(first.code).toBe(0);
-    expect(first.out).toContain("published aikongen/design-guidelines@1.2.0");
+    expect(first.out).toContain("published aikongen/design-guidelines@1.3.0");
     const again = await kc(box, ["publish", DESIGN]);
     expect(again.out).toContain("is already in the vault, unchanged");
     expect(await treeHash(DESIGN)).toBe(before);
-    const stored = join(box.vault, "capsules/aikongen/design-guidelines/versions/1.2.0", (await publishedDigest(box, "aikongen/design-guidelines", "1.2.0")).slice(7));
+    const stored = join(box.vault, "capsules/aikongen/design-guidelines/versions/1.3.0", (await publishedDigest(box, "aikongen/design-guidelines", "1.3.0")).slice(7));
     expect((await stat(join(stored, "canonical.md"))).isFile()).toBe(true);
   });
 
@@ -89,7 +89,7 @@ describe("publish", () => {
   test("two concurrent first publishes of one folder store one version and both succeed", async () => {
     const box = await fresh();
     await kc(box, ["init"]);
-    const dir = await variant(box, DESIGN, "concurrent", "1.3.0");
+    const dir = await variant(box, DESIGN, "concurrent", "1.4.0");
     const path = join(dir, "capsule.json");
     const manifest = JSON.parse(await readFile(path, "utf8")) as Record<string, unknown>;
     for (const key of ["digest", "publishedAt", "status"]) delete manifest[key];
@@ -112,10 +112,10 @@ describe("publish", () => {
       expect(r.code).toBe(0);
     }
     const outs = results.map((r) => r.out).sort();
-    expect(outs.filter((o) => o.startsWith("published aikongen/design-guidelines@1.3.0")).length).toBe(1);
+    expect(outs.filter((o) => o.startsWith("published aikongen/design-guidelines@1.4.0")).length).toBe(1);
     expect(outs.filter((o) => o.includes("is already in the vault, unchanged")).length).toBe(1);
     const versions = await readdir(join(box.vault, "capsules/aikongen/design-guidelines/versions"));
-    expect(versions.filter((v) => v === "1.3.0")).toEqual(["1.3.0"]);
+    expect(versions.filter((v) => v === "1.4.0")).toEqual(["1.4.0"]);
     expect((await kc(box, ["status"])).out).toContain("versions: 1");
   });
 
@@ -123,10 +123,10 @@ describe("publish", () => {
     const box = await fresh();
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
-    const next = await variant(box, DESIGN, "next", "1.3.0");
+    const next = await variant(box, DESIGN, "next", "1.4.0");
     const result = await kc(box, ["publish", next]);
     expect(result.code).toBe(0);
-    expect(result.out).toContain("aikongen/design-guidelines@1.3.0");
+    expect(result.out).toContain("aikongen/design-guidelines@1.4.0");
     const status = await kc(box, ["status"]);
     expect(status.out).toContain("capsules: 1, versions: 2");
   });
@@ -135,14 +135,14 @@ describe("publish", () => {
 describe("publish from a minimal capsule.json", () => {
   test("digest, publishedAt, schemaVersion and status may be absent", async () => {
     const box = await fresh();
-    const dir = await variant(box, DESIGN, "minimal", "1.2.0");
+    const dir = await variant(box, DESIGN, "minimal", "1.3.0");
     const path = join(dir, "capsule.json");
     const manifest = JSON.parse(await readFile(path, "utf8")) as Record<string, unknown>;
     for (const key of ["digest", "publishedAt", "schemaVersion", "status"]) delete manifest[key];
     await writeFile(path, `${JSON.stringify(manifest, null, 2)}\n`);
     const result = await kc(box, ["publish", dir]);
     expect(result.err).toBe("");
-    expect(result.out.split("\n")[0]).toBe("published aikongen/design-guidelines@1.2.0");
+    expect(result.out.split("\n")[0]).toBe("published aikongen/design-guidelines@1.3.0");
   });
 });
 
@@ -151,17 +151,17 @@ describe("add, remove, update", () => {
     const box = await fresh();
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
-    const added = await kc(box, ["add", "aikongen/design-guidelines@1.2.0"]);
+    const added = await kc(box, ["add", "aikongen/design-guidelines@1.3.0"]);
     expect(added.code).toBe(0);
     const manifest = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: { id: string; version: string; digest: string }[] };
-    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.2.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.2.0") }]);
+    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.3.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.3.0") }]);
 
-    await kc(box, ["publish", await variant(box, DESIGN, "next", "1.3.0")]);
-    expect((await kc(box, ["status"])).out).toContain("1.3.0 is available; run kc update");
+    await kc(box, ["publish", await variant(box, DESIGN, "next", "1.4.0")]);
+    expect((await kc(box, ["status"])).out).toContain("1.4.0 is available; run kc update");
     const updated = await kc(box, ["update"]);
-    expect(updated.out).toContain("aikongen/design-guidelines: 1.2.0 -> 1.3.0");
+    expect(updated.out).toContain("aikongen/design-guidelines: 1.3.0 -> 1.4.0");
     const after = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: { version: string }[] };
-    expect(after.capsules[0]?.version).toBe("1.3.0");
+    expect(after.capsules[0]?.version).toBe("1.4.0");
 
     const removed = await kc(box, ["remove", "aikongen/design-guidelines"]);
     expect(removed.code).toBe(0);
@@ -174,16 +174,16 @@ describe("add, remove, update", () => {
     const box = await fresh();
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
-    const added = await kc(box, ["add", "aikongen/design-guidelines@1.2.0"]);
+    const added = await kc(box, ["add", "aikongen/design-guidelines@1.3.0"]);
     expect(added.code).toBe(0);
-    expect(added.out).toBe("this repository now uses aikongen/design-guidelines@1.2.0");
+    expect(added.out).toBe("this repository now uses aikongen/design-guidelines@1.3.0");
     const manifest = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: unknown[] };
-    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.2.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.2.0") }]);
+    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.3.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.3.0") }]);
     expect((await kc(box, ["add", "aikongen/design-guidelines"])).code).toBe(0);
 
     const wrongVersion = await kc(box, ["add", "aikongen/design-guidelines@9.9.9"]);
     expect(wrongVersion.code).toBe(1);
-    expect(wrongVersion.err).toBe("error: aikongen/design-guidelines@9.9.9 is not in the vault; it has 1.2.0");
+    expect(wrongVersion.err).toBe("error: aikongen/design-guidelines@9.9.9 is not in the vault; it has 1.3.0");
     expect(wrongVersion.err).not.toContain("Did you mean");
     const typo = await kc(box, ["add", "aikongen/design-guideline"]);
     expect(typo.err).toContain("Did you mean aikongen/design-guidelines?");
@@ -207,9 +207,9 @@ describe("add, remove, update", () => {
     const box = await fresh();
     const folder = await kc(box, ["add", DESIGN]);
     expect(folder.code).toBe(0);
-    expect(folder.out).toBe("published aikongen/design-guidelines@1.2.0\nthis repository now uses aikongen/design-guidelines@1.2.0");
+    expect(folder.out).toBe("published aikongen/design-guidelines@1.3.0\nthis repository now uses aikongen/design-guidelines@1.3.0");
     const manifest = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: unknown[] };
-    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.2.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.2.0") }]);
+    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.3.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.3.0") }]);
     expect((await kc(box, ["add", DESIGN])).out).toContain("is already in the vault, unchanged");
 
     const zip = join(box.root, "docs.zip");
@@ -247,13 +247,13 @@ describe("export and import", () => {
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
     const zip = join(box.root, "out", "design.zip");
-    const exported = await kc(box, ["export", "aikongen/design-guidelines@1.2.0", zip]);
+    const exported = await kc(box, ["export", "aikongen/design-guidelines@1.3.0", zip]);
     expect(exported.code).toBe(0);
-    expect(exported.out).toContain("exported aikongen/design-guidelines@1.2.0 to");
+    expect(exported.out).toContain("exported aikongen/design-guidelines@1.3.0 to");
     await kc(box, ["init"], { vault: other });
     const imported = await kc(box, ["import", zip], { vault: other });
     expect(imported.code).toBe(0);
-    expect(imported.out).toContain("imported aikongen/design-guidelines@1.2.0");
+    expect(imported.out).toContain("imported aikongen/design-guidelines@1.3.0");
     expect((await kc(box, ["import", zip], { vault: other })).out).toContain("is already in the vault, unchanged");
   });
 });
@@ -459,16 +459,16 @@ describe("the vault creates itself on the first write", () => {
 describe("publish --version", () => {
   test("accepts the version that capsule.json declares", async () => {
     const box = await fresh();
-    const result = await kc(box, ["publish", DESIGN, "--version", "1.2.0"]);
+    const result = await kc(box, ["publish", DESIGN, "--version", "1.3.0"]);
     expect(result.err).toBe("");
-    expect(result.out).toContain("aikongen/design-guidelines@1.2.0");
+    expect(result.out).toContain("aikongen/design-guidelines@1.3.0");
   });
 
   test("refuses a different version and publishes nothing", async () => {
     const box = await fresh();
     const result = await kc(box, ["publish", DESIGN, "--version", "2.0.0"]);
     expect(result.code).toBe(1);
-    expect(result.err).toContain("--version 2.0.0 does not match version 1.2.0");
+    expect(result.err).toContain("--version 2.0.0 does not match version 1.3.0");
     expect((await kc(box, ["status"])).out).toContain("versions: 0");
   });
 

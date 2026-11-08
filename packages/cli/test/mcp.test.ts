@@ -17,7 +17,7 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
   await kc(box, ["init"]);
   await kc(box, ["publish", DESIGN]);
   await kc(box, ["publish", DOCS]);
-  const DESIGN_DIGEST = await publishedDigest(box, "aikongen/design-guidelines", "1.2.0");
+  const DESIGN_DIGEST = await publishedDigest(box, "aikongen/design-guidelines", "1.3.0");
 
   const transport = new StdioClientTransport({
     command: process.execPath,
@@ -47,11 +47,11 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
     expect(JSON.parse(await readFile(join(box.vault, "usage", opened[0]!), "utf8"))).toEqual({
       event: "opened",
       capsule: "aikongen/design-guidelines",
-      version: "1.2.0",
+      version: "1.3.0",
       digest: DESIGN_DIGEST,
       at: expect.any(String),
     });
-    expect(JSON.parse(capsule[0]!.text)).toMatchObject({ id: "aikongen/design-guidelines", version: "1.2.0", digest: DESIGN_DIGEST, kind: "guidelines" });
+    expect(JSON.parse(capsule[0]!.text)).toMatchObject({ id: "aikongen/design-guidelines", version: "1.3.0", digest: DESIGN_DIGEST, kind: "guidelines" });
     expect(capsule[1]!.text).toBe(await readFile(join(DESIGN, "canonical.md"), "utf8"));
 
     const exact = blocks(await client.callTool({ name: "get_version", arguments: { digest: DESIGN_DIGEST } }));
@@ -109,7 +109,7 @@ test("inside a repository with kc.json, list_capsules shows only the pinned caps
   await kc(box, ["init"]);
   await kc(box, ["publish", DOCS]);
   await kc(box, ["publish", DESIGN]);
-  await kc(box, ["add", "aikongen/design-guidelines@1.2.0"]);
+  await kc(box, ["add", "aikongen/design-guidelines@1.3.0"]);
   const client = new Client({ name: "test", version: "0.0.0" });
   await client.connect(
     new StdioClientTransport({

@@ -23,7 +23,7 @@ Before choosing a layout, identify the actions and outcomes the task requires. A
 ## Decide what the product can responsibly decide
 
 - **Start with a useful default.** Infer information already available and avoid asking again. Expose a setting when a real task needs a different outcome, not because an implementation offers a parameter.
-- **Keep meaningful control.** Do not infer permission to spend, share, delete or affect other people. Explain the scope and consequence before commitment; use the actual action as the button label. Never preselect the destructive choice in a confirmation.
+- **Keep meaningful control.** Do not infer permission to spend, share, delete or affect other people. Explain the scope and consequence before commitment; use the actual action as the button label. Never preselect the destructive choice in a confirmation, because a habitual Enter would then destroy.
 - **Show what matters now.** Prioritize the person's goal, current state and next useful action. Keep internal workers, protocols and configuration structure out of the ordinary flow unless they help a real decision.
 - **Make changes understandable.** Show effective behavior, including inherited values and relevant dependencies. Preserve a discoverable route to necessary adjustments and details.
 - **Keep the experience steady.** Use familiar platform patterns, consistent names, readable hierarchy and stable layout. Reserve space for loading content so controls do not unexpectedly jump under the pointer or lose focus. Keep necessary reflow predictable.
@@ -50,7 +50,7 @@ Give each animation a user-facing purpose: show a relationship, preserve orienta
 - **Respect motion preferences.** Remove decorative movement under reduced motion. Preserve necessary meaning through immediate state changes, text, highlighting or a less disruptive transition. No essential information may depend only on motion. Provide pause, stop or hide controls for nonessential continuous motion and automatic updates alongside other content. Avoid flashing effects; reduced motion is not a substitute for flash safety.
 - **Verify over time.** Observe the transition, repeated interaction and reduced-motion behavior on the actual artifact. Check focus, layout movement and final state. A static screenshot cannot establish motion quality or correctness.
 
-Do not add recurring pulses, large zooms, bouncing controls, staged delays or animated decoration merely to make the product feel polished. Do not copy one duration or spring across every platform. Platform defaults are the starting point; an exception needs a specific benefit and observed behavior.
+Do not add recurring pulses, large zooms, bouncing controls, staged delays or animated decoration merely to make the product feel polished. Do not copy one duration or spring across every platform, because each platform's own motion is what its people expect. Platform defaults are the starting point; an exception needs a specific benefit and observed behavior.
 
 ## Preserve meaning and access
 

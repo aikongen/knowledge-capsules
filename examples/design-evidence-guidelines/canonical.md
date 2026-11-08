@@ -4,7 +4,7 @@ Apply these rules when you judge, review or accept a screen, flow or journey, in
 
 An agent may accept or reject a design against the design rules it was given. A human study is not a prerequisite for an AI gate verdict: state what the AI actually observed and its limits. Do not claim that a tasteful screenshot or successful navigation proves human usability. Representative human usability remains unknown until observed with people. Record that limitation separately; it does not block acceptance against the AI gates below.
 
-Use the smallest trial that can expose the decision. For a layout question, reuse an existing screen or a minimal preview. For an interaction question, use existing components and only the behavior needed to test it. Compare two or three credible directions with identical content, starting state and goal when the owner must choose a material visual direction. Do not build a backend or a full application to settle that choice.
+Use the smallest trial that can expose the decision. For a layout question, reuse an existing screen or a minimal preview. For an interaction question, use existing components and only the behavior needed to test it. Compare two or three credible directions with identical content, starting state and goal when the owner must choose a material visual direction. Do not build a backend or a full application to settle that choice, because the choice is visual and the build would outlive it.
 
 For a new or materially changed journey, use the following trial. For a small change, inspect and exercise the affected gates; do not repeat unaffected evidence. The unfamiliar scenario and good/flawed calibration are needed when introducing or changing a reusable rule or judging method, not for every routine screen edit.
 
