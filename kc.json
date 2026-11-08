@@ -20,6 +20,16 @@
       "id": "aikongen/documentation-guidelines",
       "version": "1.2.0",
       "digest": "sha256:2ea39bf0f4754fdc8140cea4ade5a87395e65c0d6fef8f6b9b3f254ffc40409b"
+    },
+    {
+      "id": "aikongen/documentation-layout",
+      "version": "1.0.1",
+      "digest": "sha256:3fa9ddb1765fed1fe57ad7076bd620bf4747d864d3ce7517ea588e975eda6dd5"
+    },
+    {
+      "id": "aikongen/general-coding-conventions",
+      "version": "1.0.1",
+      "digest": "sha256:507426d44f25e9e1b2f8c29e47d5b20f6fe295296cccddeba82e5866e10c7839"
     }
   ]
 }

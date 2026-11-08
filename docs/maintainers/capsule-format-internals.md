@@ -1,6 +1,6 @@
 # Capsule format internals
 
-For maintainers; the user page is [capsule-format.md](../capsule-format.md). Source: PRD.md, "What a capsule is". Code: `packages/capsule-format`, schema `packages/contracts/schemas/capsule-manifest.schema.json`. Two real capsules: `examples/design-guidelines/`, `examples/documentation-guidelines/` (capsule.json + canonical.md each).
+For maintainers; the user page is [capsule-format.md](../capsule-format.md). Source: PRD.md, "What a capsule is". Code: `packages/capsule-format`, schema `packages/contracts/schemas/capsule-manifest.schema.json`. Real capsules: every folder in `examples/` (capsule.json + canonical.md each); `ls examples` lists them.
 
 A capsule is a folder with a thin required core and optional layers. The `kind` says which layers are required.
 

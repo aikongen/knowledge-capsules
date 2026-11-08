@@ -4,6 +4,10 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ## Unreleased
 
+### Added
+
+- Three example capsules: `aikongen/general-coding-conventions` 1.0.1 (writing, testing and landing code), `aikongen/documentation-layout` 1.0.1 (where a document goes and its front matter) and `aikongen/macos-design-guidelines` 1.0.1 (native macOS interfaces in SwiftUI).
+
 ## 0.1.0-preview.9 - 2026-11-08
 
 ### Added
