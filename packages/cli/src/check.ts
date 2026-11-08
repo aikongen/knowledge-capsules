@@ -147,14 +147,14 @@ function sentences(text: string): string[] {
   return text.split(/(?<=[.!?])\s+/).filter((s) => s.trim() !== "");
 }
 
-/** Paragraphs: consecutive unfenced lines joined with spaces; a blank line, a heading or a list item starts a new one. `n` is the first line. */
+/** Paragraphs: consecutive unfenced lines joined with spaces; a blank line, a table row, a heading or a list item starts a new one; table rows are left out. `n` is the first line. */
 function paragraphs(lines: readonly Line[]): { n: number; text: string }[] {
   const out: { n: number; text: string }[] = [];
   let current: { n: number; text: string } | undefined;
   for (const l of lines) {
     const text = l.text.trim();
     const starts = /^([-*]|\d+\.)\s/.test(text) || text.startsWith("#");
-    if (l.fenced || text === "") {
+    if (l.fenced || text === "" || text.startsWith("|")) {
       if (current) out.push(current);
       current = undefined;
       continue;
@@ -189,8 +189,12 @@ export function checkCanonical(canonical: string): Finding[] {
   const dates = lines.flatMap((l) => [...l.text.matchAll(/\d{4}-\d{2}-\d{2}/g)].map(() => l.n));
   if (dates.length > 0) found.push(advice(`${plural(dates.length, "date", "dates")} (${lineList(dates)}); dates go stale`));
 
-  const rules = paragraphs(lines).flatMap((p) => sentences(unquoted(p.text)).filter((s) => RULE.test(s) && !REASON.test(s)).map(() => p.n));
-  if (rules.length > 0) found.push(advice(`${plural(rules.length, "rule", "rules")} without a reason (${lineList(rules)}); say why in the same sentence`));
+  const rules = paragraphs(lines)
+    .map((p) => unquoted(p.text))
+    .map((text, i) => ({ n: paragraphs(lines)[i]!.n, rule: sentences(text).some((s) => RULE.test(s)), reason: REASON.test(text) }))
+    .filter((p) => p.rule && !p.reason)
+    .map((p) => p.n);
+  if (rules.length > 0) found.push(advice(`${plural(rules.length, "paragraph", "paragraphs")} with a rule and no reason (${lineList(rules)}); say why beside the rule`));
 
   const headings = lines.filter((l) => !l.fenced && l.text.startsWith("# "));
   if (headings.length > 1) found.push(advice(`${headings.length} level-1 headings; one subject per capsule`));

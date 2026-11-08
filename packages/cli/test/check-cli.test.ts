@@ -39,7 +39,7 @@ describe("check a folder", () => {
     expect(result.code).toBe(0);
     expect(result.err).toBe("");
     expect(result.out.split("\n")[0]).toBe("aikongen/design-guidelines@1.2.0: 1 piece of advice");
-    expect(result.out.split("\n")[1]).toMatch(/^ {2}advice: \d+ rules without a reason \(lines /);
+    expect(result.out.split("\n")[1]).toMatch(/^ {2}advice: \d+ paragraphs with a rule and no reason \(lines /);
     await expect(stat(box.vault)).rejects.toThrow();
   });
 
