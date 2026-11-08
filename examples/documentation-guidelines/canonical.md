@@ -34,9 +34,9 @@ Applies to every Markdown document you write or change.
   Use the consumer's actual corpus, navigation, build and rendered checks for a
   documentation site. Record each impacted page as updated, verified unchanged,
   or not needed with a reason; unavailable change history remains unverified.
-- R10. Use this standard when an audience contract points here. In a reused workflow
-  step, select this standard and the intended audience through local guidance; that
-  selection does not enable either standard throughout the repository.
+- R10. Apply these rules to every Markdown file you write or change. When a repository
+  names a different standard for one audience, such as a developer guide or an agent
+  instruction file, follow that standard there and these rules everywhere else.
 - R11. Give a document one mode: a tutorial teaches by doing, a how-to reaches a goal,
   a reference states facts for lookup, an explanation answers why. Split and link
   rather than mix them.
