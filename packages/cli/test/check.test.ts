@@ -77,15 +77,28 @@ describe("canonical", () => {
     expect(texts(checkCanonical("on 2026-11-01\n"))).toEqual(["advice: 1 date (line 1); dates go stale"]);
   });
 
-  test("rules without a reason", () => {
+  test("rules without a reason, judged per paragraph", () => {
     const text = [
       "You must keep it short.",
+      "",
       "You must keep it short because people skim.",
+      "",
       "Never ship. Always test, otherwise it breaks.",
+      "",
       "Please do not panic, and don't stop.",
+      "",
       "Mustard is fine.",
     ].join("\n");
-    expect(texts(checkCanonical(text))).toEqual(["advice: 3 rules without a reason (lines 1, 3, 4); say why in the same sentence"]);
+    expect(texts(checkCanonical(text))).toEqual(["advice: 3 rules without a reason (lines 1, 5, 7); say why in the same sentence"]);
+  });
+
+  test("a rule wrapped over two lines with the reason on the second line is not flagged", () => {
+    expect(checkCanonical("You must keep every paragraph short\nbecause people skim.\n")).toEqual([]);
+    expect(texts(checkCanonical("You must keep every paragraph short\nand clear.\n"))).toEqual(["advice: 1 rule without a reason (line 1); say why in the same sentence"]);
+  });
+
+  test("a quoted or backticked rule word is not a rule", () => {
+    expect(checkCanonical('Say "never" to the word, and write `must` in code.\n')).toEqual([]);
   });
 
   test("more than one level-1 heading", () => {

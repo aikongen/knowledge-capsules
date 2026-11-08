@@ -33,22 +33,30 @@ async function folderWith(box: Sandbox, name: string, canonical: string, own?: {
 const CLEAN = { id: "tests/clean", trigger: "Use when writing short text." };
 
 describe("check a folder", () => {
-  test("design-guidelines: the word count line, exit 0, no vault created", async () => {
+  test("design-guidelines: exit 0, advice only, no vault created", async () => {
     const box = await fresh();
     const result = await kc(box, ["check", DESIGN]);
     expect(result.code).toBe(0);
     expect(result.err).toBe("");
-    expect(result.out.split("\n").slice(0, 2)).toEqual(["aikongen/design-guidelines@1.2.0: 2 pieces of advice", "  advice: 2,392 words; split before about 2,000"]);
+    expect(result.out.split("\n")[0]).toBe("aikongen/design-guidelines@1.2.0: 1 piece of advice");
+    expect(result.out.split("\n")[1]).toMatch(/^ {2}advice: \d+ rules without a reason \(lines /);
     await expect(stat(box.vault)).rejects.toThrow();
   });
 
-  test("documentation-guidelines skips a quoted path; capsule-writing-guidelines finds its dates", async () => {
+  test("documentation-guidelines skips a quoted path; capsule-writing-guidelines has no advice", async () => {
     const box = await fresh();
     const docs = await kc(box, ["check", DOCS]);
-    expect(docs.out.split("\n").slice(0, 2)).toEqual(["aikongen/documentation-guidelines@1.1.0: 1 piece of advice", '  skipped: line 72 "/*.md" look quoted, not paths']);
+    expect(docs.out.split("\n").slice(0, 2)).toEqual(["aikongen/documentation-guidelines@1.2.0: 1 piece of advice", '  skipped: line 72 "/*.md" look quoted, not paths']);
     const writing = await kc(box, ["check", WRITING]);
-    expect(writing.out.split("\n")[0]).toBe("aikongen/capsule-writing-guidelines@1.0.0: 2 pieces of advice");
-    expect(writing.out).toContain("  advice: 6 dates (lines 5, 13, 17, 19, 23, 72); dates go stale");
+    expect(writing.out).toBe("aikongen/capsule-writing-guidelines@1.1.0: no advice");
+  });
+
+  test("over 2,000 words, exact line", async () => {
+    const box = await fresh();
+    const dir = await folderWith(box, "long", `# Title\n\n${Array(2001).fill("word").join(" ")}\n`);
+    const result = await kc(box, ["check", dir]);
+    expect(result.code).toBe(0);
+    expect(result.out).toBe("aikongen/documentation-guidelines@1.2.0: 1 piece of advice\n  advice: 2,003 words; split before about 2,000");
   });
 
   test("links, dates and quoted words, exact output", async () => {
@@ -62,7 +70,7 @@ describe("check a folder", () => {
     expect(result.code).toBe(0);
     expect(result.out).toBe(
       [
-        "aikongen/documentation-guidelines@1.1.0: 3 pieces of advice",
+        "aikongen/documentation-guidelines@1.2.0: 3 pieces of advice",
         '  advice: line 3 "[the guide](guide.md)": a reader with only this capsule cannot follow it',
         '  advice: line 3 "https://example.com": a reader with only this capsule cannot follow it',
         '  skipped: line 4 "https://quoted.example" look quoted, not links',
@@ -75,7 +83,7 @@ describe("check a folder", () => {
     const box = await fresh();
     const dir = await folderWith(box, "clean", "# Title\n\nWrite short sentences.\n", CLEAN);
     const result = await kc(box, ["check", dir]);
-    expect(result.out).toBe("tests/clean@1.1.0: no advice");
+    expect(result.out).toBe("tests/clean@1.2.0: no advice");
     expect(result.code).toBe(0);
   });
 
@@ -106,17 +114,27 @@ describe("check this repository", () => {
 
   test("every pinned capsule from the vault, then the triggers they share", async () => {
     const box = await fresh();
-    for (const folder of [DESIGN, DOCS, WRITING]) await kc(box, ["add", folder]);
+    const one = await folderWith(box, "one", "# Title\n\nWritten 2026-11-01.\n", { id: "tests/one", trigger: "Use when writing, changing or reviewing text." });
+    const two = await folderWith(box, "two", "# Title\n\nWrite short sentences.\n", { id: "tests/two", trigger: "Use when reviewing, writing or changing code." });
+    const three = await folderWith(box, "three", "# Title\n\nWrite short sentences.\n", { id: "tests/three", trigger: "Use when designing screens." });
+    for (const folder of [one, two, three]) await kc(box, ["add", folder]);
     const result = await kc(box, ["check"]);
     expect(result.code).toBe(0);
-    const lines = result.out.split("\n");
-    expect(lines.filter((l) => !l.startsWith("  "))).toEqual([
-      "aikongen/capsule-writing-guidelines@1.0.0: 2 pieces of advice",
-      "aikongen/design-guidelines@1.2.0: 2 pieces of advice",
-      "aikongen/documentation-guidelines@1.1.0: 1 piece of advice",
-      "triggers of aikongen/capsule-writing-guidelines and aikongen/documentation-guidelines share: writing, changing, reviewing",
-    ]);
-    expect(lines).toContain("  advice: 2,392 words; split before about 2,000");
+    expect(result.out).toBe(
+      [
+        "tests/one@1.2.0: 1 piece of advice",
+        "  advice: 1 date (line 3); dates go stale",
+        "tests/three@1.2.0: no advice",
+        "tests/two@1.2.0: no advice",
+        "triggers of tests/one and tests/two share: writing, changing, reviewing",
+      ].join("\n"),
+    );
+  });
+
+  test("a pinned example with nothing to say", async () => {
+    const box = await fresh();
+    await kc(box, ["add", WRITING]);
+    expect((await kc(box, ["check"])).out).toBe("aikongen/capsule-writing-guidelines@1.1.0: no advice");
   });
 
   test("a pinned capsule that the vault lacks is an error", async () => {
@@ -133,13 +151,10 @@ describe("check this repository", () => {
 describe("publish points to check", () => {
   test("one extra line when there is advice, nothing when there is none", async () => {
     const box = await fresh();
-    const advised = await kc(box, ["publish", DESIGN]);
-    expect(advised.out).toBe(`published aikongen/design-guidelines@1.2.0\n2 pieces of advice; run kc check ${DESIGN}`);
-    const again = await kc(box, ["publish", DESIGN]);
-    expect(again.out).toBe(`aikongen/design-guidelines@1.2.0 is already in the vault, unchanged\n2 pieces of advice; run kc check ${DESIGN}`);
-    const one = await folderWith(box, "one", "# Title\n\nWritten 2026-11-01.\n");
-    expect((await kc(box, ["publish", one])).out).toBe(`published aikongen/documentation-guidelines@1.1.0\n1 piece of advice; run kc check ${one}`);
+    const dated = await folderWith(box, "dated", "# Title\n\nWritten 2026-11-01, edited 2026-11-02.\n");
+    expect((await kc(box, ["publish", dated])).out).toBe(`published aikongen/documentation-guidelines@1.2.0\n1 piece of advice; run kc check ${dated}`);
+    expect((await kc(box, ["publish", dated])).out).toBe(`aikongen/documentation-guidelines@1.2.0 is already in the vault, unchanged\n1 piece of advice; run kc check ${dated}`);
     const clean = await folderWith(box, "clean", "# Title\n\nWrite short sentences.\n", CLEAN);
-    expect((await kc(box, ["publish", clean])).out).toBe("published tests/clean@1.1.0");
+    expect((await kc(box, ["publish", clean])).out).toBe("published tests/clean@1.2.0");
   });
 });

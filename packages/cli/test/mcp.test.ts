@@ -47,7 +47,7 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
     expect(JSON.parse(await readFile(join(box.vault, "usage", opened[0]!), "utf8"))).toEqual({
       event: "opened",
       capsule: "aikongen/design-guidelines",
-      version: "1.1.0",
+      version: "1.2.0",
       digest: DESIGN_DIGEST,
       at: expect.any(String),
     });
