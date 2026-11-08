@@ -38,7 +38,7 @@ describe("check a folder", () => {
     const result = await kc(box, ["check", DESIGN]);
     expect(result.code).toBe(0);
     expect(result.err).toBe("");
-    expect(result.out.split("\n").slice(0, 2)).toEqual(["aikongen/design-guidelines@1.1.0: 2 pieces of advice", "  advice: 2,392 words; split before about 2,000"]);
+    expect(result.out.split("\n").slice(0, 2)).toEqual(["aikongen/design-guidelines@1.2.0: 2 pieces of advice", "  advice: 2,392 words; split before about 2,000"]);
     await expect(stat(box.vault)).rejects.toThrow();
   });
 
@@ -112,7 +112,7 @@ describe("check this repository", () => {
     const lines = result.out.split("\n");
     expect(lines.filter((l) => !l.startsWith("  "))).toEqual([
       "aikongen/capsule-writing-guidelines@1.0.0: 2 pieces of advice",
-      "aikongen/design-guidelines@1.1.0: 2 pieces of advice",
+      "aikongen/design-guidelines@1.2.0: 2 pieces of advice",
       "aikongen/documentation-guidelines@1.1.0: 1 piece of advice",
       "triggers of aikongen/capsule-writing-guidelines and aikongen/documentation-guidelines share: writing, changing, reviewing",
     ]);
@@ -134,9 +134,9 @@ describe("publish points to check", () => {
   test("one extra line when there is advice, nothing when there is none", async () => {
     const box = await fresh();
     const advised = await kc(box, ["publish", DESIGN]);
-    expect(advised.out).toBe(`published aikongen/design-guidelines@1.1.0\n2 pieces of advice; run kc check ${DESIGN}`);
+    expect(advised.out).toBe(`published aikongen/design-guidelines@1.2.0\n2 pieces of advice; run kc check ${DESIGN}`);
     const again = await kc(box, ["publish", DESIGN]);
-    expect(again.out).toBe(`aikongen/design-guidelines@1.1.0 is already in the vault, unchanged\n2 pieces of advice; run kc check ${DESIGN}`);
+    expect(again.out).toBe(`aikongen/design-guidelines@1.2.0 is already in the vault, unchanged\n2 pieces of advice; run kc check ${DESIGN}`);
     const one = await folderWith(box, "one", "# Title\n\nWritten 2026-11-01.\n");
     expect((await kc(box, ["publish", one])).out).toBe(`published aikongen/documentation-guidelines@1.1.0\n1 piece of advice; run kc check ${one}`);
     const clean = await folderWith(box, "clean", "# Title\n\nWrite short sentences.\n", CLEAN);

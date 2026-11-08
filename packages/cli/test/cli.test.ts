@@ -55,11 +55,11 @@ describe("publish", () => {
     const before = await treeHash(DESIGN);
     const first = await kc(box, ["publish", DESIGN]);
     expect(first.code).toBe(0);
-    expect(first.out).toContain("published aikongen/design-guidelines@1.1.0");
+    expect(first.out).toContain("published aikongen/design-guidelines@1.2.0");
     const again = await kc(box, ["publish", DESIGN]);
     expect(again.out).toContain("is already in the vault, unchanged");
     expect(await treeHash(DESIGN)).toBe(before);
-    const stored = join(box.vault, "capsules/aikongen/design-guidelines/versions/1.1.0", (await publishedDigest(box, "aikongen/design-guidelines", "1.1.0")).slice(7));
+    const stored = join(box.vault, "capsules/aikongen/design-guidelines/versions/1.2.0", (await publishedDigest(box, "aikongen/design-guidelines", "1.2.0")).slice(7));
     expect((await stat(join(stored, "canonical.md"))).isFile()).toBe(true);
   });
 
@@ -151,10 +151,10 @@ describe("add, remove, update", () => {
     const box = await fresh();
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
-    const added = await kc(box, ["add", "aikongen/design-guidelines@1.1.0"]);
+    const added = await kc(box, ["add", "aikongen/design-guidelines@1.2.0"]);
     expect(added.code).toBe(0);
     const manifest = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: { id: string; version: string; digest: string }[] };
-    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.1.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.1.0") }]);
+    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.2.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.2.0") }]);
 
     await kc(box, ["publish", await variant(box, DESIGN, "next", "1.2.0")]);
     expect((await kc(box, ["status"])).out).toContain("1.2.0 is available; run kc update");
@@ -174,11 +174,11 @@ describe("add, remove, update", () => {
     const box = await fresh();
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
-    const added = await kc(box, ["add", "aikongen/design-guidelines@1.1.0"]);
+    const added = await kc(box, ["add", "aikongen/design-guidelines@1.2.0"]);
     expect(added.code).toBe(0);
-    expect(added.out).toBe("this repository now uses aikongen/design-guidelines@1.1.0");
+    expect(added.out).toBe("this repository now uses aikongen/design-guidelines@1.2.0");
     const manifest = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: unknown[] };
-    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.1.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.1.0") }]);
+    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.2.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.2.0") }]);
     expect((await kc(box, ["add", "aikongen/design-guidelines"])).code).toBe(0);
 
     const wrongVersion = await kc(box, ["add", "aikongen/design-guidelines@9.9.9"]);
@@ -207,9 +207,9 @@ describe("add, remove, update", () => {
     const box = await fresh();
     const folder = await kc(box, ["add", DESIGN]);
     expect(folder.code).toBe(0);
-    expect(folder.out).toBe("published aikongen/design-guidelines@1.1.0\nthis repository now uses aikongen/design-guidelines@1.1.0");
+    expect(folder.out).toBe("published aikongen/design-guidelines@1.2.0\nthis repository now uses aikongen/design-guidelines@1.2.0");
     const manifest = JSON.parse(await readFile(join(box.project, "kc.json"), "utf8")) as { capsules: unknown[] };
-    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.1.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.1.0") }]);
+    expect(manifest.capsules).toEqual([{ id: "aikongen/design-guidelines", version: "1.2.0", digest: await publishedDigest(box, "aikongen/design-guidelines", "1.2.0") }]);
     expect((await kc(box, ["add", DESIGN])).out).toContain("is already in the vault, unchanged");
 
     const zip = join(box.root, "docs.zip");
@@ -247,13 +247,13 @@ describe("export and import", () => {
     await kc(box, ["init"]);
     await kc(box, ["publish", DESIGN]);
     const zip = join(box.root, "out", "design.zip");
-    const exported = await kc(box, ["export", "aikongen/design-guidelines@1.1.0", zip]);
+    const exported = await kc(box, ["export", "aikongen/design-guidelines@1.2.0", zip]);
     expect(exported.code).toBe(0);
-    expect(exported.out).toContain("exported aikongen/design-guidelines@1.1.0 to");
+    expect(exported.out).toContain("exported aikongen/design-guidelines@1.2.0 to");
     await kc(box, ["init"], { vault: other });
     const imported = await kc(box, ["import", zip], { vault: other });
     expect(imported.code).toBe(0);
-    expect(imported.out).toContain("imported aikongen/design-guidelines@1.1.0");
+    expect(imported.out).toContain("imported aikongen/design-guidelines@1.2.0");
     expect((await kc(box, ["import", zip], { vault: other })).out).toContain("is already in the vault, unchanged");
   });
 });
@@ -461,7 +461,7 @@ describe("publish --version", () => {
     const box = await fresh();
     const result = await kc(box, ["publish", DESIGN, "--version", "1.1.0"]);
     expect(result.err).toBe("");
-    expect(result.out).toContain("aikongen/design-guidelines@1.1.0");
+    expect(result.out).toContain("aikongen/design-guidelines@1.2.0");
   });
 
   test("refuses a different version and publishes nothing", async () => {

@@ -10,7 +10,7 @@ keep it until use shows otherwise.
 
 - **One subject, complete in itself.** A reader who has nothing but the capsule can
   apply it, because a capsule travels alone: whoever reads it may not have your
-  files, your repository or your site. Never send the reader elsewhere for the
+  files, your repository or your site, so never send the reader elsewhere for the
   substance. Observed, owner's decision.
 - **Knowledge, not documentation.** How to use a product belongs in that product's
   own documentation, because it changes with the product. A capsule holds rules
@@ -57,7 +57,8 @@ A trigger is proven only on tasks it was not written for, because you can always
 word a trigger to fit the three tasks you have in mind.
 
 - **Write 10 to 20 realistic queries**, half that must open the capsule and half
-  near-misses that share words with it but need something else. Realistic means
+  near-misses that share words with it but need something else, because a test
+  with only easy cases proves nothing. Realistic means
   the way a person types: a concrete task with a file name, a bit of backstory, a
   typo. Near-misses are what make the test worth running; "write a sorting function"
   as a negative for a design capsule tests nothing. Default, taken from the same
@@ -65,11 +66,11 @@ word a trigger to fit the three tasks you have in mind.
 - **Make each query a multi-step task.** An agent does not open a capsule for a
   task it can finish in one step, whatever the trigger says. Observed: a one-line
   control task opened nothing.
-- **Run each query three times** and count how often the capsule opened, because a
-  single run can go either way. A must-open query counts when it opened at least
-  twice; a near-miss counts when it stayed closed at least twice. Default.
-- **Keep the queries beside the capsule folder, never inside it.** They are your
-  test material, not knowledge, and they may describe your own work. Default,
+- **Run each query three times** and count how often the capsule opened. A
+  must-open query counts when it opened at least twice and a near-miss when it
+  stayed closed at least twice, because a single run can go either way. Default.
+- **Keep the queries beside the capsule folder, never inside it**, because they
+  are your test material, not knowledge, and they may describe your own work. Default,
   following the owner's rule that a capsule holds only its knowledge.
 
 ## Writing the content
@@ -80,9 +81,10 @@ word a trigger to fit the three tasks you have in mind.
   "Split before 2,000 words, because the agent reads the whole text in one call."
   A reason lets the agent apply the rule to a case you did not foresee; a bare
   "never" only tells it to stop. Default, taken from the makers of coding-agent
-  skills, who treat ALWAYS and NEVER in capitals as a warning sign.
+  skills, who treat "ALWAYS" and "NEVER" in capitals as a warning sign.
 - **Give a do and a don't where a rule is easy to misread**, with the concrete
-  words, not a description of them. Default.
+  words, not a description of them, because an example settles what a paraphrase
+  leaves open. Default.
 - **State what the capsule excludes** in one short list, so a reader stops
   looking for what is not there. Default.
 - **One mode per capsule.** Rules, or a procedure, or a reference table; not all

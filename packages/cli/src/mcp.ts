@@ -73,7 +73,11 @@ export function buildServer(vault: Vault, cwd: string): McpServer {
       guard(async () => {
         const pinned = version ?? (await readRepoManifest(cwd))?.capsules.find((p) => p.id === id)?.version;
         const loaded = await vault.load(await vault.resolve(id, pinned));
-        await vault.recordOpened({ capsule: loaded.record.id, version: loaded.record.version, digest: loaded.record.digest });
+        try {
+          await vault.recordOpened({ capsule: loaded.record.id, version: loaded.record.version, digest: loaded.record.digest });
+        } catch {
+          // a read must not fail because the usage log could not be written (read-only vault)
+        }
         return capsuleReply(loaded);
       }),
   );

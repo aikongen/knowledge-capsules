@@ -140,11 +140,40 @@ function reachFindings(lines: readonly Line[], tokens: (text: string) => { at: n
 }
 
 const RULE = /\b(must|never|do not|don[’']t|always)\b/i;
-const REASON = /\b(because|so that|so the|which means|otherwise)\b/i;
+const REASON = /\b(because|so|which|otherwise|since)\b/i;
 
-/** Sentences of one line, split on ". ", "! " and "? ". */
+/** Sentences of a paragraph, split on ". ", "! " and "? ". */
 function sentences(text: string): string[] {
   return text.split(/(?<=[.!?])\s+/).filter((s) => s.trim() !== "");
+}
+
+/** Paragraphs: consecutive unfenced lines joined with spaces; a blank line, a heading or a list item starts a new one. `n` is the first line. */
+function paragraphs(lines: readonly Line[]): { n: number; text: string }[] {
+  const out: { n: number; text: string }[] = [];
+  let current: { n: number; text: string } | undefined;
+  for (const l of lines) {
+    const text = l.text.trim();
+    const starts = /^([-*]|\d+\.)\s/.test(text) || text.startsWith("#");
+    if (l.fenced || text === "") {
+      if (current) out.push(current);
+      current = undefined;
+      continue;
+    }
+    if (current && !starts) current.text += ` ${text}`;
+    else {
+      if (current) out.push(current);
+      current = { n: l.n, text };
+    }
+  }
+  if (current) out.push(current);
+  return out;
+}
+
+/** The text with every `code` and "quoted" span blanked, so a quoted rule word is not a rule. */
+function unquoted(text: string): string {
+  const chars = [...text];
+  for (const [a, b] of quotedSpans(text)) for (let i = a; i <= b; i++) chars[i] = " ";
+  return chars.join("");
 }
 
 /** Advice for canonical.md: d to i of the list. */
@@ -160,7 +189,7 @@ export function checkCanonical(canonical: string): Finding[] {
   const dates = lines.flatMap((l) => [...l.text.matchAll(/\d{4}-\d{2}-\d{2}/g)].map(() => l.n));
   if (dates.length > 0) found.push(advice(`${plural(dates.length, "date", "dates")} (${lineList(dates)}); dates go stale`));
 
-  const rules = lines.flatMap((l) => sentences(l.text).filter((s) => RULE.test(s) && !REASON.test(s)).map(() => l.n));
+  const rules = paragraphs(lines).flatMap((p) => sentences(unquoted(p.text)).filter((s) => RULE.test(s) && !REASON.test(s)).map(() => p.n));
   if (rules.length > 0) found.push(advice(`${plural(rules.length, "rule", "rules")} without a reason (${lineList(rules)}); say why in the same sentence`));
 
   const headings = lines.filter((l) => !l.fenced && l.text.startsWith("# "));
