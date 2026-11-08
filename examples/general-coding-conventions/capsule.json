@@ -1,8 +1,8 @@
 {
   "id": "aikongen/general-coding-conventions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "kind": "guidelines",
-  "trigger": "Use when writing, changing, testing, reviewing or committing code in a repository, even when the request is a one-line fix or a branch cleanup.",
+  "trigger": "Use when writing, changing, testing, reviewing or committing code in a repository, even when the request is a one-line fix, a push, a tag or a branch cleanup.",
   "scope": {
     "includes": [
       "what to build and what to reuse, tests and evidence",

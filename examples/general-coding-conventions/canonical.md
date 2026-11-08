@@ -6,7 +6,7 @@ Apply these rules whenever you write, change, test or review code. A repository'
 
 - Before building, ask whether the code needs to exist at all, because code that is not written needs no test, review or upkeep.
 - Reuse what the repository, the standard library, the platform or an installed dependency already does before writing new code, and prefer a proven tool over custom infrastructure, because a proven tool has already met the cases you have not thought of.
-- Build the smallest complete journey for the person who uses the result, not the smallest diff. Call a feature done when that journey works end to end, not when it compiles, because a working outcome earns more trust than a general mechanism nobody yet needs.
+- Build the smallest complete journey for the person who uses the result, not the smallest diff. Call a feature done when that journey works end to end, not when it compiles, because a working outcome earns more trust than a general mechanism nobody yet needs. Keep reassessing the affected design against the intended outcome and, within the task, replace what does not fit when that brings a concrete benefit, because existing code does not justify an unsuitable model.
 - Add no abstraction, dependency or boilerplate nobody asked for. Wait for two real consumers before adding an abstraction, unless safety, authority or interoperability needs it sooner, because an abstraction with one consumer only guesses at the second.
 - Prefer deletion to addition, simple to general and boring to clever, because the next reader has to understand every line you keep.
 - When you replace something, update its callers, tests and documentation, then delete the old path, so two ways of doing one thing do not drift apart.
@@ -24,13 +24,14 @@ Apply these rules whenever you write, change, test or review code. A repository'
 
 ## Check that it works
 
-- For a behavior change, write a test that fails before the change and passes after it, because a behavior change with no test is a claim nothing will notice when it stops being true. Text, one-line configuration and throwaway spikes do not need one.
+- For a behavior change, write a test that fails before the change and passes after it, because a behavior change with no test is a claim nothing will notice when it stops being true. Prose fixes, one-line configuration or manifest edits, and spikes explicitly scoped as throwaway do not need one.
 - Reproduce a reported defect before you accept a fix, because a fix for a defect nobody reproduced may fix something else.
 - See every new check fail at least once, because a check never seen failing cannot be told from one that cannot fail.
-- Prove a claim with the smallest test that can prove it, and cover a positive, a negative and a degraded case, because together they keep a suite fast and still catch the real risk.
+- Prove a claim at the smallest layer that can prove it (unit, integration, contract or end to end), because proving the same behavior again one layer up adds cost without new signal.
+- Cover a feature with a positive, a negative and a degraded case, because tests that prove only the happy path have not proven the feature.
 - Keep tests hermetic: use fixtures and temporary directories, and no real time, network, shared state, home directory or personal data, because a test that depends on them does not repeat across machines or runs.
 - Do not copy the implementation's logic into a test's expected values, because the test then repeats the bug it should catch.
-- Prove that the exact candidate works, through a real boundary when the claim depends on one. Treat what you remember about a tool or library as a guess and confirm it from the installed source or current documentation, because remembered behavior differs between versions and goes stale.
+- Prove that the exact candidate works, through a real boundary when the claim depends on one. Treat what you remember about a tool or library as a guess and confirm it from the installed source or current documentation, because what you remember is training data that differs between models and goes stale.
 - Report a check you did not run as `NOT_RUN`, and a value nobody observed as `UNKNOWN`, never as a pass, because a reader acts on what the report says was proven.
 - Before you change a dependency, check its version, license and install behavior, then pin it and keep the lockfile, so every machine builds the same thing.
 - Have someone independent of the author review every change to behavior or an interface, because the author reads what they meant, not what they wrote.

@@ -23,7 +23,7 @@ Apply these rules when you design, build or review a native macOS app's interfac
 - Use the sidebar for places and collections, not for actions. Keep it collapsible and let the system draw its material, because a person expects to hide it and to see it match other apps.
 - Use `Table` when items have several comparable attributes, because a table lets a person sort and scan by column.
 - Let selection drive the detail view and the commands that act on it, so a command acts on what the person sees selected. Support multiple selection where a command makes sense for more than one item.
-- Use `.inspector` for secondary details of the selection rather than a custom side panel, because the system panel already resizes, collapses and appears in the View menu.
+- Use `.inspector` for secondary details of the selection rather than a custom side panel, because the system panel already resizes and collapses.
 
 ## Toolbars
 
@@ -36,7 +36,7 @@ Apply these rules when you design, build or review a native macOS app's interfac
 - For a filter the person changes often within the current collection, start with a labeled system picker in the toolbar and offer the same choices in the View menu, because the menu is where a person looks for every choice.
 - Keep a temporary filter in memory, use window state only when restoring it is part of the journey, and use settings only for an app-wide preference, because a filter that outlives its moment surprises the next session.
 - A filter must not change the items or register an undo operation, because it changes the view, not the data. When it hides the selection, keep the selection identity but disable commands for content that is not visible.
-- Explain a filter with no matches with a `ContentUnavailableView` and a reset action, so the person sees why the list is empty and how to undo it.
+- Explain a filter with no matches with a plain `ContentUnavailableView`, not `.search`, and a reset action, so the person sees why the list is empty and how to undo it.
 
 ## Menu bar and commands
 
@@ -71,12 +71,12 @@ Apply these rules when you design, build or review a native macOS app's interfac
 - Show the result of an action where it happened: the item or the status changes. Do not add a toast for an outcome the person can already see, because it repeats what they saw and covers content.
 - Prefer undo to a confirmation: register changes with the window's `UndoManager` so Edit > Undo reverses them, because undo lets a person act quickly and still recover.
 - Ask for confirmation only for an action that cannot be undone and loses data. Use `.confirmationDialog` or `.alert`, name the action on the button ("Delete 3 Items", not "OK"), give the button `role: .destructive`, and do not make it the default button, because a habitual Return would then lose the data.
-- Mark destructive buttons and menu items with `role: .destructive`, so the system styles and announces them as destructive. Let the Delete key reach them through `.onDeleteCommand`, because that is the key a Mac user presses.
+- Mark destructive buttons and menu items with `role: .destructive`, so the system can style them as destructive. Let the Delete key reach them through `.onDeleteCommand`, because that is the key a Mac user presses.
 - Show an error beside what failed: say what happened and what the person can do, and offer the recovery action. Use an alert only when the person must decide before continuing, because an alert blocks the window until it is answered.
 
 ## States
 
-Handle the states the journey can reach, with stock views, because a reachable state with nothing deliberate on screen leaves the person guessing. Do not invent loading or network failures for local data, because nobody will see them.
+Handle the states the journey can reach, with stock views, because a reachable state with nothing deliberate on screen leaves the person guessing. Do not invent loading or network failures for a local fixture, because nobody will see them.
 
 - **Loading**: `ProgressView`, determinate when progress is known. Keep stale content visible while refreshing it.
 - **Empty**: `ContentUnavailableView`, saying what will appear here and, when there is one, the action that adds it.
@@ -88,7 +88,7 @@ Handle the states the journey can reach, with stock views, because a reachable s
 
 ## Settings
 
-- Open settings from the app menu's Settings item with Command-Comma, because that is where Mac users look. Where they appear is the product's recorded decision; read it before adding a `Settings` scene, because products differ on this.
+- Open settings from the app menu's Settings item with Command-Comma, because that is where Mac users look. Where they appear is the product's recorded decision; read it first, because products differ on this.
 - Build settings from a `Form`, so labels and controls align the system's way, and use a `TabView` only when there are several groups.
 - Apply a change to an app preference as soon as it is made, because macOS settings have no Save button and a person expects the change to hold at once.
 - Keep settings to what people change, because a choice the app can make well by itself is not a setting.
@@ -102,5 +102,5 @@ Handle the states the journey can reach, with stock views, because a reachable s
 
 ## Reporting what was checked
 
-- Check the app with VoiceOver, Full Keyboard Access (Tab reaches every control in a sensible order), Increase Contrast, Reduce Motion, Reduce Transparency and Xcode's Accessibility Inspector, in light and dark appearance, because each finds failures the others miss.
-- Report resizing and these accessibility checks as `NOT_RUN` until the app has run on a Mac, because a successful build or a source read cannot show them.
+- Check the app with VoiceOver, Full Keyboard Access, Increase Contrast, Reduce Motion, Reduce Transparency and Xcode's Accessibility Inspector, in light and dark appearance, because each finds failures the others miss.
+- Run these checks and the window-size trials only with the Mac owner's permission, because they take over the Mac's screen and settings. Report each one not run as `NOT_RUN`, because a successful build or a source read cannot show them.

@@ -12,7 +12,7 @@ Apply these rules when you add, move or name a documentation file, or decide whe
 ## Decision records
 
 - Record each decision set in `docs/decisions/` as one file named `NNNN-slug.md` with a four-digit number, and never reuse a number, because other pages and commits cite records by number.
-- Open each record with the date, the status, what it supersedes and its source. The status is `proposed`, `accepted by the owner` with the date and where, or `superseded by NNNN`, so a reader can tell at once whether the record is in force.
+- Open each record, after any front matter, with a heading and a line that gives the date, the status, what it supersedes and its source. The status is `proposed`, `accepted by the owner` with the date and where, or `superseded by NNNN`, so a reader can tell at once whether the record is in force.
 - Let the newest record win. A record that reverses an earlier one names it, as in `Supersedes: NNNN item N`, and changes the older file's status line in the same commit. Keep the older text, so the history stays readable and nothing is deleted. Only the owner reverses a decision; an agent writes the superseding record when the owner asks, never on its own, because a reversal is itself a decision.
 - Treat a record that is not yet accepted as `proposed`, and nothing in the repository acts on it as approved, because only the owner's acceptance makes a decision.
 
@@ -35,5 +35,5 @@ Apply this section when the repository builds a documentation site from its Mark
 
 ## What stays out
 
-- Publish only consumer pages on a public documentation site. Maintainer pages and decision records stay in the repository and are read there. Leave them out of the site's navigation, its search index and any export written for AI agents, because hiding a page from the menu alone still leaks it through search and exports.
-- Keep process records out of the repository: implementation notes, plans, reviews, audits, run accounts, evidence, prototypes and session handovers go in a git-ignored local folder such as `.local/records/`. The repository holds only what describes the product for its users and maintainers, such as the README, requirements, boundaries, design, guides, the maintainer guide and the owner's decisions, because process records describe the work, not the product, and go stale as soon as the work ends.
+- On a documentation site written for consumers, publish only consumer pages. Maintainer pages and decision records stay in the repository and are read there. Leave them out of the site's navigation, its search index and any export written for AI agents, because hiding a page from the menu alone still leaks it through search and exports.
+- Keep process records out of the repository: implementation notes, plans, reviews, audits, run accounts, evidence, prototypes and session handovers go in the checkout's git-ignored `.local/records/` folder and are never committed or pushed. The repository holds only what describes the product for its users and maintainers, such as the README, requirements, boundaries, design, guides, the maintainer guide and the owner's decisions, because process records describe the work, not the product, and go stale as soon as the work ends.
