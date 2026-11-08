@@ -1,0 +1,20 @@
+{
+  "id": "aikongen/documentation-layout",
+  "version": "1.0.0",
+  "kind": "guidelines",
+  "trigger": "Use when adding, moving or naming a documentation file, or deciding where a repository's documents live, even when the request only asks to write one page or record one decision.",
+  "scope": {
+    "includes": [
+      "which folder a document goes in, and its front matter",
+      "what stays out of the repository and off a public site"
+    ],
+    "excludes": [
+      "how the text of a page is written",
+      "a product's own site build and its commands",
+      "agent instruction files, changelogs and capsule content"
+    ]
+  },
+  "contents": {
+    "canonical": "canonical.md"
+  }
+}

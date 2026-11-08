@@ -1,0 +1,21 @@
+{
+  "id": "aikongen/macos-design-guidelines",
+  "version": "1.0.0",
+  "kind": "guidelines",
+  "trigger": "Use when designing, building or reviewing a native macOS app's interface in SwiftUI, even when the request only asks for a feature or a fix: a menu command, a shortcut, an empty state.",
+  "scope": {
+    "includes": [
+      "scenes, navigation, toolbars, menus, keyboard and focus",
+      "type, color, materials, layout, states, settings and accessibility on macOS"
+    ],
+    "excludes": [
+      "design rules that hold on every platform",
+      "iOS, iPadOS, watchOS and visionOS",
+      "a product's own recorded design decisions, such as brand colors or where settings open",
+      "build, signing and test commands"
+    ]
+  },
+  "contents": {
+    "canonical": "canonical.md"
+  }
+}

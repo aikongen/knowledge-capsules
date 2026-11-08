@@ -8,7 +8,7 @@ design-guidelines/
   canonical.md    the content your agent reads
 ```
 
-Four finished examples: [design-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/design-guidelines), [design-evidence-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/design-evidence-guidelines), [documentation-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/documentation-guidelines) and [capsule-writing-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/capsule-writing-guidelines), which says how to write a trigger and content.
+Seven finished examples: [design-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/design-guidelines), [design-evidence-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/design-evidence-guidelines), [macos-design-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/macos-design-guidelines), [documentation-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/documentation-guidelines), [documentation-layout](https://github.com/aikongen/knowledge-capsules/tree/main/examples/documentation-layout), [general-coding-conventions](https://github.com/aikongen/knowledge-capsules/tree/main/examples/general-coding-conventions) and [capsule-writing-guidelines](https://github.com/aikongen/knowledge-capsules/tree/main/examples/capsule-writing-guidelines), which says how to write a trigger and content.
 
 ## What you write in capsule.json
 

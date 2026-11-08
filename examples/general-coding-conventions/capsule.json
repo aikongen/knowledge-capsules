@@ -1,0 +1,21 @@
+{
+  "id": "aikongen/general-coding-conventions",
+  "version": "1.0.0",
+  "kind": "guidelines",
+  "trigger": "Use when writing, changing, testing, reviewing or committing code in a repository, even when the request is a one-line fix or a branch cleanup.",
+  "scope": {
+    "includes": [
+      "what to build and what to reuse, tests and evidence",
+      "commits, branches and what stays out of git"
+    ],
+    "excludes": [
+      "design and Markdown writing rules",
+      "a repository's own commands, paths and stack conventions",
+      "who may merge, which each repository states",
+      "when review happens, which each repository states"
+    ]
+  },
+  "contents": {
+    "canonical": "canonical.md"
+  }
+}
