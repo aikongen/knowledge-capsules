@@ -3,18 +3,23 @@
   "capsules": [
     {
       "id": "aikongen/capsule-writing-guidelines",
+      "version": "1.1.0",
+      "digest": "sha256:bb4277f2d051a4ed9728998a4b4ad1caeca75332ed05967fd85bb420f7f6efd6"
+    },
+    {
+      "id": "aikongen/design-evidence-guidelines",
       "version": "1.0.0",
-      "digest": "sha256:2fe268308cac77c7847f71065e2d35e238bb9595c2292c6ce590ae282fa5e189"
+      "digest": "sha256:00e3ba779c02d05dc6ee59bc50a29f431216e30333a2ab8792375c4765af95bf"
     },
     {
       "id": "aikongen/design-guidelines",
-      "version": "1.1.0",
-      "digest": "sha256:22a2e54e3e7861d126d6acecb11a03b9abe1c53a0fbe10f0228e1c3a1497b156"
+      "version": "1.2.0",
+      "digest": "sha256:76ee384fee345b2319abf8cded46edf0a3fe8c9d99c2090d0f9ba8d533aaeb30"
     },
     {
       "id": "aikongen/documentation-guidelines",
-      "version": "1.1.0",
-      "digest": "sha256:15fae72fa989a331b18c7006c9c9ab127723d9e3befd5001556d5da81b37177b"
+      "version": "1.2.0",
+      "digest": "sha256:2ea39bf0f4754fdc8140cea4ade5a87395e65c0d6fef8f6b9b3f254ffc40409b"
     }
   ]
 }
