@@ -1,6 +1,6 @@
-# Shared design guidelines
+# Design guidelines
 
-Use these rules when designing, changing or reviewing anything a person sees, reads, decides or recovers from. This is the authoritative source for shared product design. Platform guidance determines how these outcomes are presented, without waiving usability, accessibility, consent or truthful status.
+Use these rules when designing, changing or reviewing anything a person sees, reads, decides or recovers from. Platform guidance determines how these outcomes are presented, without waiving usability, accessibility, consent or truthful status.
 
 ## Apply the rules without being asked
 
@@ -8,7 +8,7 @@ Apply this guide to every change that alters what a person sees, reads, decides 
 
 Make ordinary design decisions from this guide, the platform guide and the product's recorded decisions. Ask the owner only for missing product intent or authority, with a recommendation. Comparing two or three credible directions, or a longer design conversation with the owner, is for when the owner asks for one or a material visual direction is open; routine work requires neither. An acceptance step that a workflow or product requires still applies. A product's own recorded decisions stay in its guidance and survive a guidance upgrade.
 
-Aim for a product that feels simple, beautiful, premium and calm: one clear purpose per view, a steady rhythm from the product's existing spacing and type scale (tokens on web, system text styles on native), color reserved for meaning, precise copy, and nothing decorative competing with the task. Passing the gates below does not by itself make a screen good; also judge whether it looks considered and quiet, and when it falls short, name the specific change that would improve it. A review finding names the rule or the concrete consequence for the person. A different taste is a suggestion, not a defect.
+Aim for a product that feels simple, beautiful, premium and calm: one clear purpose per view, a steady rhythm from the product's existing spacing and type scale (tokens on web, system text styles on native), color reserved for meaning, precise copy, and nothing decorative competing with the task. Passing every rule here does not by itself make a screen good; also judge whether it looks considered and quiet, and when it falls short, name the specific change that would improve it. A review finding names the rule or the concrete consequence for the person. A different taste is a suggestion, not a defect.
 
 ## Make the product usable before it needs explaining
 
@@ -61,29 +61,3 @@ Provide accessible names, keyboard and assistive-technology access, visible focu
 A failed or missing response does not prove that an operation had no effect. Say “Nothing changed” only when the underlying state establishes that fact. When the result is uncertain, preserve the work, show uncertainty and reconcile the existing attempt before offering a retry that could duplicate effects. Distinguish canceling an operation from closing its view: after submission, offer Cancel only if the operation can actually be stopped, and claim cancellation only when confirmed.
 
 Use the target's existing components and platform conventions. Web component fidelity remains a component requirement; it does not establish that a page uses the right controls or information. Native apps use native components, fonts, colors, materials and shortcuts. Shared rules do not prescribe identical pixels, a universal column layout or one typeface across targets. Product-specific brand choices must not undermine these outcomes.
-
-## Judge a journey from evidence
-
-AI may accept or reject a design against these rules. A human study is not a prerequisite for an AI gate verdict: state what the AI actually observed and its limits. Do not claim that a tasteful screenshot or successful navigation proves human usability. Representative human usability remains unknown until observed with people. Record that limitation separately; it does not block acceptance against the AI gates below.
-
-Use the smallest trial that can expose the decision. For a layout question, reuse an existing screen or a minimal preview. For an interaction question, use existing components and only the behavior needed to test it. Compare two or three credible directions with identical content, starting state and goal when the owner must choose a material visual direction. Do not build a backend or a full application to settle that choice.
-
-For a new or materially changed journey, use the following trial. For a small change, inspect and exercise the affected gates; do not repeat unaffected evidence. The unfamiliar scenario and good/flawed calibration are needed when introducing or changing a reusable rule or judging method, not for every routine screen edit.
-
-1. Give a fresh actor an ordinary goal and the rendered interface, without the implementation, design rationale or control names that reveal the solution. Choose a task that is meaningful without specialist vocabulary.
-2. Before a consequential action, have the actor predict its effect from visible evidence. Record where the interface makes them guess; outside knowledge must not fill the gap.
-3. Observe the result, including the effective saved state when persistence matters. A success message alone is insufficient. Exercise the relevant mistake, failed operation or safe stopping path and applicable accessible input.
-4. Have an independent reviewer inspect the observations against the gates below. Separate observations from the actor's interpretation. Inspect missing evidence before asking the owner; escalate only unresolved intent or authority.
-5. Check the proposed rule on an unfamiliar scenario. Calibrate the review with a credible good case and a targeted flawed variant, such as a hidden deletion consequence. Agreement between models is not independent proof of usability.
-
-| Gate                          | Evidence needed for PASS                                                                                                                          | Example of FAIL                                                                           |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Find and start                | The actor identifies and reaches a useful first action without coaching, with readable content and accessible names.                              | The task requires knowing an internal term or completing a tour to find the action.       |
-| Understand and choose         | Visible defaults and grouped summaries accurately explain behavior; required controls remain discoverable.                                        | A summary hides an exception, or simplifying removes a control required by the task.      |
-| Commit knowingly              | The actor predicts the material effect and scope from information shown before commitment.                                                        | Shared data is deleted by an innocuous toggle without disclosing existing-data impact.    |
-| Know the result               | Observed state supports the displayed outcome, including delay, failure and uncertainty.                                                          | “Saved” appears before confirmation or persists after the save fails.                     |
-| Recover and remain in control | The relevant recovery or safe stop works with keyboard and applicable assistive input; focus, contrast and motion preferences do not obstruct it. | Retry loses work, rapid interaction applies a stale choice, or keyboard focus disappears. |
-
-Record PASS, FAIL or UNKNOWN for each applicable gate, with the task, candidate, observation and limitation. A known violation is FAIL, including a specification that visibly omits a required action; missing runtime evidence does not erase that finding. Missing observation is UNKNOWN, not a pass or a design defect by itself. Explain any gate that is not applicable. Resolve essential UNKNOWN evidence before acceptance; do not average away a failed gate with a score.
-
-Static-only work may establish layout evidence while interaction and motion remain UNKNOWN. A guidance-only smoke test may establish discovery and an agent's proposed decisions; it cannot establish rendered usability. Do not present either as a human usability study.

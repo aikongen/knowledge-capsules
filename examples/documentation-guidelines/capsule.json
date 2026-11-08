@@ -1,6 +1,6 @@
 {
   "id": "aikongen/documentation-guidelines",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "guidelines",
   "trigger": "Use when writing, changing or reviewing Markdown documentation for any reader.",
   "scope": {
@@ -8,7 +8,7 @@
       "accuracy of behaviour, status and prerequisites"
     ],
     "excludes": [
-      "audience-specific contracts for developers, agent instructions and consumers"
+      "files written for one audience under their own standard, such as a developer guide or an agent instruction file"
     ]
   },
   "contents": {

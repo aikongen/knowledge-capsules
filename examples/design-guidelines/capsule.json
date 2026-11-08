@@ -1,16 +1,17 @@
 {
   "id": "aikongen/design-guidelines",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "guidelines",
-  "trigger": "Use when designing, changing or reviewing anything a person sees, reads, decides or recovers from.",
+  "trigger": "Use when designing, changing or reviewing anything a person sees, reads, decides or recovers from, even when the request does not mention design: a wording fix, a default, an error, an empty state.",
   "scope": {
     "includes": [
       "backend behaviour that produces those states",
-      "how a design is judged from evidence"
+      "wording, defaults, errors, empty, pending and unknown states"
     ],
     "excludes": [
       "platform-specific implementation details",
-      "a product's own recorded design decisions"
+      "a product's own recorded design decisions",
+      "how a finished design is judged from evidence"
     ]
   },
   "contents": {
