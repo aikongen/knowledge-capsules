@@ -26,9 +26,9 @@ keep it until use shows otherwise.
 
 ## Writing the trigger
 
-The trigger is the one line an agent reads in the capsule list, next to the "not
-for" list from `scope.excludes`. It alone decides whether the capsule is opened,
-because the content is read only after that decision.
+The trigger is the one line an agent reads before it decides to open the capsule,
+so it alone decides whether the capsule is opened; the content is read only after
+that decision.
 
 - **Start with "Use when" and name the task in the agent's own verbs.** Write
   "Use when writing, changing or reviewing Markdown documentation", not
@@ -43,8 +43,8 @@ because the content is read only after that decision.
 - **One task per trigger.** When a trigger needs "or" between two different tasks,
   write two capsules, because a reader of the second task would otherwise carry
   the text of the first. Default.
-- **Put what it is not for in `scope.excludes`.** The agent sees that list beside
-  the trigger, so the trigger itself stays one positive line. Default.
+- **Keep the trigger one positive line and put exclusions in the excludes list**,
+  because a trigger that also says what it is not for reads as two tasks. Default.
 - **Name the task, not the place.** Do not write the product, the author or "this
   repository" in the trigger, because the same capsule is pinned in many
   repositories. Default.

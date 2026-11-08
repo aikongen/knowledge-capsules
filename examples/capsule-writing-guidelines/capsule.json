@@ -9,8 +9,8 @@
       "how an agent decides to open a capsule"
     ],
     "excludes": [
-      "the file format and fields of capsule.json",
-      "the kc commands that publish and pin"
+      "the file format and fields of a capsule",
+      "the commands that publish and pin a capsule"
     ]
   },
   "contents": {

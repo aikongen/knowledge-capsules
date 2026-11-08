@@ -5,8 +5,8 @@
   "trigger": "Use when designing, changing or reviewing anything a person sees, reads, decides or recovers from, even when the request does not mention design: a wording fix, a default, an error, an empty state.",
   "scope": {
     "includes": [
-      "backend behaviour that produces those states",
-      "wording, defaults, errors, empty, pending and unknown states"
+      "wording, defaults, errors, empty, pending and unknown states",
+      "backend behaviour that produces those states"
     ],
     "excludes": [
       "platform-specific implementation details",

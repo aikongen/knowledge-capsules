@@ -2,7 +2,6 @@
 
 Apply these rules when you judge, review or accept a screen, flow or journey, including when the request only asks whether it is done or good enough.
 
-
 An agent may accept or reject a design against the design rules it was given. A human study is not a prerequisite for an AI gate verdict: state what the AI actually observed and its limits. Do not claim that a tasteful screenshot or successful navigation proves human usability. Representative human usability remains unknown until observed with people. Record that limitation separately; it does not block acceptance against the AI gates below.
 
 Use the smallest trial that can expose the decision. For a layout question, reuse an existing screen or a minimal preview. For an interaction question, use existing components and only the behavior needed to test it. Compare two or three credible directions with identical content, starting state and goal when the owner must choose a material visual direction. Do not build a backend or a full application to settle that choice.
