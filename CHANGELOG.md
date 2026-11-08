@@ -4,6 +4,17 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ## Unreleased
 
+### Added
+
+- `kc check <folder>` and `kc check`: advice on a capsule, or on every capsule this repository uses, and on the words their triggers share. Advice only: it never blocks a publish, never scores, and exits 0.
+- `kc publish` ends with one line pointing to `kc check` when there is advice.
+- The MCP `list_capsules` items carry `notFor`, the capsule's `scope.excludes`, so an agent sees what a capsule is not for beside its "use when" line.
+- `get_capsule` writes an `opened` record to the vault's usage log; `report_usage` records carry `event: "reported"`.
+
+### Changed
+
+- Example capsules renamed to the author namespace `aikongen/` (was `surfaces/`), with new versions: design-guidelines 1.2.0, documentation-guidelines 1.2.0, and two new ones, design-evidence-guidelines 1.0.0 and capsule-writing-guidelines 1.1.0.
+
 ## 0.1.0-preview.8 - 2026-11-07
 
 ### Changed
