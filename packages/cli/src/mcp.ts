@@ -17,6 +17,8 @@ function core(loaded: LoadedVersion) {
   return { id: m.id, version: m.version, digest: loaded.record.digest, kind: m.kind, trigger: m.trigger, scope: m.scope };
 }
 
+const stringList = (value: unknown): string[] => (Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : []);
+
 function content(loaded: LoadedVersion): string {
   const path = loaded.manifest.contents.canonical;
   const bytes = loaded.pkg.entries.get(path);
@@ -42,7 +44,7 @@ export function buildServer(vault: Vault, cwd: string): McpServer {
 
   server.registerTool(
     "list_capsules",
-    { description: 'Call at the start of a task. Lists the knowledge capsules for this repository, each with a "use when" line.' },
+    { description: 'Call at the start of a task. Lists the knowledge capsules for this repository, each with a "use when" line and a "not for" list.' },
     () =>
       guard(async () => {
         const pins = (await readRepoManifest(cwd))?.capsules;
@@ -52,7 +54,7 @@ export function buildServer(vault: Vault, cwd: string): McpServer {
         const listed = [];
         for (const record of records) {
           const loaded = await vault.load(record);
-          listed.push({ id: record.id, version: record.version, trigger: loaded.manifest.trigger });
+          listed.push({ id: record.id, version: record.version, trigger: loaded.manifest.trigger, notFor: stringList(loaded.manifest.scope["excludes"]) });
         }
         return json(listed);
       }),
@@ -70,7 +72,9 @@ export function buildServer(vault: Vault, cwd: string): McpServer {
     ({ id, version }: { id: string; version?: string | undefined }) =>
       guard(async () => {
         const pinned = version ?? (await readRepoManifest(cwd))?.capsules.find((p) => p.id === id)?.version;
-        return capsuleReply(await vault.load(await vault.resolve(id, pinned)));
+        const loaded = await vault.load(await vault.resolve(id, pinned));
+        await vault.recordOpened({ capsule: loaded.record.id, version: loaded.record.version, digest: loaded.record.digest });
+        return capsuleReply(loaded);
       }),
   );
 

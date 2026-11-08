@@ -34,9 +34,23 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
     const listed = JSON.parse(blocks(await client.callTool({ name: "list_capsules", arguments: {} }))[0]!.text) as { id: string; trigger: string }[];
     expect(listed.map((c) => c.id)).toEqual(["aikongen/design-guidelines", "aikongen/documentation-guidelines"]);
     expect(listed.every((c) => c.trigger.length > 0)).toBe(true);
-    expect(listed.every((c) => Object.keys(c).sort().join() === "id,trigger,version")).toBe(true);
+    expect(listed.every((c) => Object.keys(c).sort().join() === "id,notFor,trigger,version")).toBe(true);
+    const design = JSON.parse(await readFile(join(DESIGN, "capsule.json"), "utf8")) as { scope: { excludes: string[] } };
+    expect((listed as unknown as { id: string; notFor: string[] }[]).find((c) => c.id === "aikongen/design-guidelines")?.notFor).toEqual(design.scope.excludes);
+    const described = (await client.listTools()).tools.find((t) => t.name === "list_capsules")?.description;
+    expect(described).toBe('Call at the start of a task. Lists the knowledge capsules for this repository, each with a "use when" line and a "not for" list.');
+    expect(await readdir(join(box.vault, "usage"))).toHaveLength(0);
 
     const capsule = blocks(await client.callTool({ name: "get_capsule", arguments: { id: "aikongen/design-guidelines" } }));
+    const opened = await readdir(join(box.vault, "usage"));
+    expect(opened).toHaveLength(1);
+    expect(JSON.parse(await readFile(join(box.vault, "usage", opened[0]!), "utf8"))).toEqual({
+      event: "opened",
+      capsule: "aikongen/design-guidelines",
+      version: "1.1.0",
+      digest: DESIGN_DIGEST,
+      at: expect.any(String),
+    });
     expect(JSON.parse(capsule[0]!.text)).toMatchObject({ id: "aikongen/design-guidelines", version: "1.1.0", digest: DESIGN_DIGEST, kind: "guidelines" });
     expect(capsule[1]!.text).toBe(await readFile(join(DESIGN, "canonical.md"), "utf8"));
 
@@ -54,12 +68,11 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
     expect((usage as { isError?: boolean }).isError).toBeUndefined();
     expect(JSON.parse(blocks(usage)[0]!.text)).toEqual({ recorded: true });
     const files = await readdir(join(box.vault, "usage"));
-    expect(files).toHaveLength(1);
-    expect(JSON.parse(await readFile(join(box.vault, "usage", files[0]!), "utf8"))).toMatchObject({
-      capsule: "aikongen/design-guidelines",
-      digest: DESIGN_DIGEST,
-      note: "layout rules",
-    });
+    expect(files).toHaveLength(2);
+    const records = await Promise.all(files.map(async (f) => JSON.parse(await readFile(join(box.vault, "usage", f), "utf8")) as Record<string, unknown>));
+    const reported = records.find((r) => r["event"] === undefined);
+    expect(reported).toMatchObject({ capsule: "aikongen/design-guidelines", digest: DESIGN_DIGEST, note: "layout rules" });
+    expect(Object.keys(reported!).sort()).toEqual(["capsule", "digest", "note", "reportedAt"]);
   } finally {
     await client.close();
   }

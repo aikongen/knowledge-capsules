@@ -362,16 +362,26 @@ export class Vault {
 
   /** report_usage: one plain JSON file per record under usage/. */
   async recordUsage(input: { capsule: string; digest?: string; note?: string }): Promise<string> {
-    await this.assertExists();
-    const record = {
-      reportedAt: new Date().toISOString(),
+    const reportedAt = new Date().toISOString();
+    return this.writeUsage(reportedAt, {
+      reportedAt,
       capsule: input.capsule,
       ...(input.digest === undefined ? {} : { digest: input.digest }),
       ...(input.note === undefined ? {} : { note: input.note }),
-    };
+    });
+  }
+
+  /** get_capsule: a record that the capsule was opened, told apart from a report by `event: "opened"`. */
+  async recordOpened(input: { capsule: string; version: string; digest: string }): Promise<string> {
+    const at = new Date().toISOString();
+    return this.writeUsage(at, { event: "opened", capsule: input.capsule, version: input.version, digest: input.digest, at });
+  }
+
+  private async writeUsage(time: string, record: object): Promise<string> {
+    await this.assertExists();
     const dir = join(this.layout.root, "usage");
     await mkdir(dir, { recursive: true });
-    const path = join(dir, `${record.reportedAt.replace(/[:.]/g, "-")}-${crypto.randomUUID().slice(0, 8)}.json`);
+    const path = join(dir, `${time.replace(/[:.]/g, "-")}-${crypto.randomUUID().slice(0, 8)}.json`);
     must(await writeFileCreateOnlyAtomic(path, `${JSON.stringify(record, null, 2)}\n`));
     return path;
   }

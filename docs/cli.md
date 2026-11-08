@@ -7,7 +7,8 @@
 | Command | What it does | Example |
 | --- | --- | --- |
 | `kc init` | Create the vault. Other commands do this for you. | |
-| `kc publish <folder>` | Save a capsule folder as a new version. The folder is not changed. A version that already exists with different content is refused. | `kc publish ./design-guidelines` |
+| `kc publish <folder>` | Save a capsule folder as a new version. The folder is not changed. A version that already exists with different content is refused. When `kc check` would have advice, one more line says how many pieces and which command to run. | `kc publish ./design-guidelines` |
+| `kc check [folder]` | Advice on a capsule folder, without publishing. Without a folder, advice on each capsule this repository uses, and which triggers share many words. It never blocks and never fails for advice. | `kc check ./design-guidelines` |
 | `kc add <id[@version]\|folder\|file.zip>` | Use a capsule in this repository. A folder is published first, a zip imported first. Without a version, the newest. | `kc add aikongen/design-guidelines@1.1.0` |
 | `kc connect <claude-code\|codex\|opencode\|pi>` | Let that coding agent find your capsules. Safe to run again. | `kc connect claude-code` |
 | `kc status` | Show the vault and this repository's capsules. | |

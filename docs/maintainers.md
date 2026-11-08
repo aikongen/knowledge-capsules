@@ -50,7 +50,7 @@ Plain files are canonical. `database.sqlite` is an index that can be deleted and
   capsules/<namespace>/<name>/
     registry.json                    the list of this capsule's versions: version, digest, status, publishedAt, revision
     versions/<semver>/<digest hex>/  one published version: capsule.json, canonical.md (and any listed files)
-  usage/<time>-<id>.json             one file per report_usage call
+  usage/<time>-<id>.json             one file per report_usage call, and one per get_capsule call (event "opened")
   runtime/                           lease.sqlite, the one-writer guard
   database.sqlite                    rebuildable index
 ```
@@ -90,8 +90,8 @@ Home is `$HOME` (`%USERPROFILE%` on Windows). A `opencode.json` or `.mcp.json` t
 
 | Tool | Input | Output |
 | --- | --- | --- |
-| `list_capsules` | none | JSON array of `{id, version, trigger}`: the versions in `kc.json` if the current directory has one, else the latest of every capsule in the vault |
-| `get_capsule` | `id`, optional `version` | two text blocks: the core as JSON (`id, version, digest, kind, trigger, scope`), then the markdown content. Version: given, else in `kc.json`, else latest |
+| `list_capsules` | none | JSON array of `{id, version, trigger, notFor}` (`notFor` is the capsule's `scope.excludes`, possibly empty): the versions in `kc.json` if the current directory has one, else the latest of every capsule in the vault |
+| `get_capsule` | `id`, optional `version` | two text blocks: the core as JSON (`id, version, digest, kind, trigger, scope`), then the markdown content. Version: given, else in `kc.json`, else latest. Also writes `usage/<time>-<id>.json` with `event: "opened"`, `capsule`, `version`, `digest`, `at` |
 | `get_version` | `digest` (`sha256:...`) | same two blocks for that exact version; `isError` if unknown |
 | `report_usage` | `capsule` (id), optional `digest`, optional `note` | writes `usage/<time>-<id>.json` with `reportedAt`, `capsule`, `digest`, `note`; returns `{recorded: true}` |
 
