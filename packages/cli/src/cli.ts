@@ -144,8 +144,12 @@ async function exec(io: Io, command: string, args: string[]): Promise<void> {
     case "publish": {
       const { record, created, folder } = await publishFolder(io, vault, args);
       io.out(created ? `published ${record.id}@${record.version}` : `${record.id}@${record.version} is already in the vault, unchanged`);
-      const findings = checkCapsule(await checkInputFromFolder(abs(folder)));
-      if (adviceCount(findings) > 0) io.out(`${piecesOfAdvice(findings)}; run kc check ${folder}`);
+      try {
+        const findings = checkCapsule(await checkInputFromFolder(abs(folder)));
+        if (adviceCount(findings) > 0) io.out(`${piecesOfAdvice(findings)}; run kc check ${folder}`);
+      } catch {
+        // the capsule is published; advice is a courtesy and never turns a success into a failure
+      }
       return;
     }
     case "check": {
@@ -162,8 +166,19 @@ async function exec(io: Io, command: string, args: string[]): Promise<void> {
       }
       await vault.assertExists();
       const inputs: CheckInput[] = [];
-      for (const pin of pins) inputs.push(checkInputFromVault(await vault.load(await vault.resolve(pin.id, pin.version))));
-      for (const input of inputs) for (const line of formatReport(input, checkCapsule(input))) io.out(line);
+      for (const pin of pins) {
+        let record: VersionRecord;
+        try {
+          record = await vault.resolve(pin.id, pin.version);
+        } catch (error) {
+          if (!(error instanceof KcError) || error.code !== "not_found") throw error;
+          io.out(`skipped: ${pin.id}@${pin.version} is not in the vault`);
+          continue;
+        }
+        const input = checkInputFromVault(await vault.load(record));
+        inputs.push(input);
+        for (const line of formatReport(input, checkCapsule(input))) io.out(line);
+      }
       for (const line of checkSet(inputs)) io.out(line);
       return;
     }

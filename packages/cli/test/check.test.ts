@@ -98,6 +98,22 @@ describe("canonical", () => {
     expect(checkCanonical("| Do | Don't |\n| --- | --- |\n| Never guess. | Always ask. |\n")).toEqual([]);
   });
 
+  test("a heading ends its own paragraph, so the rule is reported on its own line", () => {
+    expect(texts(checkCanonical("# T\nNever do X.\n"))).toEqual(["advice: 1 paragraph with a rule and no reason (line 2); say why beside the rule"]);
+  });
+
+  test("dates inside code fences, backticks or quotes are not counted", () => {
+    expect(checkCanonical("```\n2026-01-01\n```\nUse `2026-01-02` or \"2026-01-03\".\n")).toEqual([]);
+    expect(texts(checkCanonical("Real 2026-01-04 and `2026-01-05`.\n"))).toEqual(["advice: 1 date (line 1); dates go stale"]);
+  });
+
+  test("a double quote after a digit is an inch mark and opens no quote", () => {
+    expect(texts(checkCanonical('A 5" screen must be tall. See https://a.io\n'))).toEqual([
+      'advice: line 1 "https://a.io": a reader with only this capsule cannot follow it',
+      "advice: 1 paragraph with a rule and no reason (line 1); say why beside the rule",
+    ]);
+  });
+
   test("a quoted or backticked rule word is not a rule", () => {
     expect(checkCanonical('Say "never" to the word, and write `must` in code.\n')).toEqual([]);
   });
@@ -127,6 +143,12 @@ describe("report", () => {
 describe("set", () => {
   test("shared words, stop words dropped, in the order of the first trigger", () => {
     expect(sharedTriggerWords("Use when writing, changing or reviewing a capsule.", "Use when reviewing, writing or changing Markdown for any reader.")).toEqual(["writing", "changing", "reviewing"]);
+  });
+
+  test("the words of the usual 'even when the request does not mention' phrase say nothing", () => {
+    const a = "Use when writing text, even when the request does not mention it, only from such cases as says.";
+    const b = "Use when coding, even when the request does not mention it, only from such cases as says.";
+    expect(sharedTriggerWords(a, b)).toEqual([]);
   });
 
   test("fewer than 3 shared words is not reported", () => {

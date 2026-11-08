@@ -364,6 +364,7 @@ export class Vault {
   async recordUsage(input: { capsule: string; digest?: string; note?: string }): Promise<string> {
     const reportedAt = new Date().toISOString();
     return this.writeUsage(reportedAt, {
+      event: "reported",
       reportedAt,
       capsule: input.capsule,
       ...(input.digest === undefined ? {} : { digest: input.digest }),

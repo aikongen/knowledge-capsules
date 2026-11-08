@@ -86,7 +86,8 @@ function linesOf(text: string): Line[] {
 /** [start, end] index pairs of `code` and "quoted" spans on one line, the quote marks included. */
 function quotedSpans(text: string): [number, number][] {
   const spans: [number, number][] = [];
-  for (const pattern of [/`[^`]*`/g, /"[^"]*"/g, /“[^”]*”/g]) {
+  // A " right after a digit is an inch mark (5" screen), not the start of a quote.
+  for (const pattern of [/`[^`]*`/g, /(?<!\d)"[^"]*"/g, /“[^”]*”/g]) {
     for (const m of text.matchAll(pattern)) spans.push([m.index, m.index + m[0].length - 1]);
   }
   return spans;
@@ -142,20 +143,21 @@ function reachFindings(lines: readonly Line[], tokens: (text: string) => { at: n
 const RULE = /\b(must|never|do not|don[’']t|always)\b/i;
 const REASON = /\b(because|so|which|otherwise|since)\b/i;
 
-/** Sentences of a paragraph, split on ". ", "! " and "? ". */
-function sentences(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+/).filter((s) => s.trim() !== "");
-}
-
 /** Paragraphs: consecutive unfenced lines joined with spaces; a blank line, a table row, a heading or a list item starts a new one; table rows are left out. `n` is the first line. */
 function paragraphs(lines: readonly Line[]): { n: number; text: string }[] {
   const out: { n: number; text: string }[] = [];
   let current: { n: number; text: string } | undefined;
   for (const l of lines) {
     const text = l.text.trim();
-    const starts = /^([-*]|\d+\.)\s/.test(text) || text.startsWith("#");
+    const starts = /^([-*]|\d+\.)\s/.test(text);
     if (l.fenced || text === "" || text.startsWith("|")) {
       if (current) out.push(current);
+      current = undefined;
+      continue;
+    }
+    if (text.startsWith("#")) {
+      if (current) out.push(current);
+      out.push({ n: l.n, text });
       current = undefined;
       continue;
     }
@@ -186,13 +188,17 @@ export function checkCanonical(canonical: string): Finding[] {
   found.push(...reachFindings(lines, linkTokens, "a reader with only this capsule cannot follow it", "look quoted, not links"));
   found.push(...reachFindings(lines, pathTokens, "a path is a pointer; put the substance here", "look quoted, not paths"));
 
-  const dates = lines.flatMap((l) => [...l.text.matchAll(/\d{4}-\d{2}-\d{2}/g)].map(() => l.n));
+  const dates = lines
+    .filter((l) => !l.fenced)
+    .flatMap((l) => {
+      const spans = quotedSpans(l.text);
+      return [...l.text.matchAll(/\d{4}-\d{2}-\d{2}/g)].filter((m) => !isQuoted(spans, m.index)).map(() => l.n);
+    });
   if (dates.length > 0) found.push(advice(`${plural(dates.length, "date", "dates")} (${lineList(dates)}); dates go stale`));
 
   const rules = paragraphs(lines)
-    .map((p) => unquoted(p.text))
-    .map((text, i) => ({ n: paragraphs(lines)[i]!.n, rule: sentences(text).some((s) => RULE.test(s)), reason: REASON.test(text) }))
-    .filter((p) => p.rule && !p.reason)
+    .map((p) => ({ n: p.n, text: unquoted(p.text) }))
+    .filter((p) => RULE.test(p.text) && !REASON.test(p.text))
     .map((p) => p.n);
   if (rules.length > 0) found.push(advice(`${plural(rules.length, "paragraph", "paragraphs")} with a rule and no reason (${lineList(rules)}); say why beside the rule`));
 
@@ -216,7 +222,7 @@ export function formatReport(input: Pick<CheckInput, "id" | "version">, findings
   return [head, ...findings.map((f) => `  ${f.kind}: ${f.text}`)];
 }
 
-const STOP_WORDS = new Set(["use", "when", "or", "and", "a", "an", "the", "for", "any", "anything", "of", "to", "in", "on", "its", "it", "is", "that", "this", "with"]);
+const STOP_WORDS = new Set(["use", "when", "or", "and", "a", "an", "the", "for", "any", "anything", "of", "to", "in", "on", "its", "it", "is", "that", "this", "with", "even", "request", "does", "not", "mention", "only", "says", "from", "such", "as"]);
 
 function triggerWords(trigger: string): string[] {
   return [...new Set(trigger.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w !== "" && !STOP_WORDS.has(w)))];

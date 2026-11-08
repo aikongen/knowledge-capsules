@@ -1,5 +1,5 @@
 import { afterAll, expect, test } from "bun:test";
-import { rm, readdir, readFile } from "node:fs/promises";
+import { rm, readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -70,9 +70,34 @@ test("mcp over stdio exposes exactly the four tools and answers all of them", as
     const files = await readdir(join(box.vault, "usage"));
     expect(files).toHaveLength(2);
     const records = await Promise.all(files.map(async (f) => JSON.parse(await readFile(join(box.vault, "usage", f), "utf8")) as Record<string, unknown>));
-    const reported = records.find((r) => r["event"] === undefined);
+    const reported = records.find((r) => r["event"] === "reported");
     expect(reported).toMatchObject({ capsule: "aikongen/design-guidelines", digest: DESIGN_DIGEST, note: "layout rules" });
-    expect(Object.keys(reported!).sort()).toEqual(["capsule", "digest", "note", "reportedAt"]);
+    expect(Object.keys(reported!).sort()).toEqual(["capsule", "digest", "event", "note", "reportedAt"]);
+  } finally {
+    await client.close();
+  }
+}, 30_000);
+
+test("get_capsule still answers when the usage log cannot be written", async () => {
+  const box = await sandbox();
+  afterAll(() => rm(box.root, { recursive: true, force: true }));
+  await kc(box, ["init"]);
+  await kc(box, ["publish", DOCS]);
+  await rm(join(box.vault, "usage"), { recursive: true });
+  await writeFile(join(box.vault, "usage"), "not a folder");
+  const client = new Client({ name: "test", version: "0.0.0" });
+  await client.connect(
+    new StdioClientTransport({
+      command: process.execPath,
+      args: ["run", ENTRY, "mcp"],
+      cwd: box.project,
+      env: { ...(process.env as Record<string, string>), KC_VAULT: box.vault },
+    }),
+  );
+  try {
+    const reply = await client.callTool({ name: "get_capsule", arguments: { id: "aikongen/documentation-guidelines" } });
+    expect((reply as { isError?: boolean }).isError).toBeUndefined();
+    expect(blocks(reply)[1]!.text).toBe(await readFile(join(DOCS, "canonical.md"), "utf8"));
   } finally {
     await client.close();
   }
