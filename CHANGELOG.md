@@ -4,6 +4,8 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ## Unreleased
 
+## 0.1.0-preview.9 - 2026-11-08
+
 ### Added
 
 - `kc check <folder>` and `kc check`: advice on a capsule, or on every capsule this repository uses, and on the words their triggers share. Advice only: it never blocks a publish, never scores, and exits 0.
