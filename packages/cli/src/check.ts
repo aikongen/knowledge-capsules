@@ -57,8 +57,8 @@ export function checkTrigger(id: string, trigger: string): Finding[] {
   }
   const namespace = id.split("/")[0] ?? "";
   const lower = trigger.toLowerCase();
-  const places = ["this repository", "our ", "we ", namespace.toLowerCase()].filter(
-    (p) => p !== "" && (p.endsWith(" ") ? new RegExp(`(^|[^a-z])${p}`).test(lower) : lower.includes(p)),
+  const places = ["this repository", "our", "we", namespace.toLowerCase()].filter(
+    (p) => p !== "" && new RegExp(`(^|[^a-z0-9])${p.replace(/[^a-z0-9 ]/g, "\\$&")}(?![a-z0-9])`).test(lower),
   );
   if (places.length > 0) {
     found.push(advice(`trigger has ${places.map((p) => quote(p.trim())).join(", ")}: the same capsule is pinned in many repositories; name the task, not the place`));
