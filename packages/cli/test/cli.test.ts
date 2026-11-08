@@ -142,7 +142,7 @@ describe("publish from a minimal capsule.json", () => {
     await writeFile(path, `${JSON.stringify(manifest, null, 2)}\n`);
     const result = await kc(box, ["publish", dir]);
     expect(result.err).toBe("");
-    expect(result.out).toBe("published aikongen/design-guidelines@1.2.0");
+    expect(result.out).toBe(`published aikongen/design-guidelines@1.2.0\n2 pieces of advice; run kc check ${dir}`);
   });
 });
 

@@ -1,14 +1,15 @@
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 
-import { readZipArchive, createCapsulePackage, writeDeterministicZip } from "@kc/capsule-format";
+import { MANIFEST_PATH, parseManifest, readZipArchive, createCapsulePackage, writeDeterministicZip } from "@kc/capsule-format";
 import { KcError } from "@kc/contracts";
 
+import { adviceCount, checkCapsule, checkSet, formatReport, type CheckInput, type Finding } from "./check.ts";
 import { CONNECT_TARGETS, connect, leaveNote, startEntry, type ConnectTarget } from "./connect.ts";
 import { serveMcp } from "./mcp.ts";
 import { VERSION } from "./version.ts";
 import { readRepoManifest, withPin, writeRepoManifest } from "./repo-manifest.ts";
-import { Vault, defaultVaultPath, type VersionRecord } from "./vault.ts";
+import { Vault, defaultVaultPath, type LoadedVersion, type VersionRecord } from "./vault.ts";
 
 export interface Io {
   readonly cwd: string;
@@ -26,6 +27,7 @@ const COMMANDS: readonly (readonly [string, string])[] = [
   ["publish <folder>", "save a capsule folder as a new version"],
   ["add <id[@version]>", "use a capsule in this repository"],
   ["connect <agent>", "let that coding agent find your capsules (--no-note: skip the note)"],
+  ["check [folder]", "advice on a capsule folder, or on this repository's capsules"],
   ["status", "show the vault and this repository's capsules"],
   ["", ""],
   ["update [id]", "use the newest versions from the vault"],
@@ -39,10 +41,10 @@ const row = ([left, right]: readonly [string, string]): string => `  ${left.padE
 
 export const USAGE = `kc <command>
 
-${COMMANDS.slice(0, 4).map(row).join("\n")}
+${COMMANDS.slice(0, 5).map(row).join("\n")}
 
 More:
-${COMMANDS.slice(5).map(row).join("\n")}
+${COMMANDS.slice(6).map(row).join("\n")}
 
 add also takes a folder or a zip file and saves it to the vault first.
 connect takes ${CONNECT_TARGETS.slice(0, -1).join(", ")} or ${CONNECT_TARGETS.at(-1)}.
@@ -100,8 +102,34 @@ async function publishFolder(io: Io, vault: Vault, args: string[]) {
     throw new KcError("validation_failed", `usage: kc ${usage}`);
   }
   await vault.init();
-  return vault.publish(resolve(io.cwd, rest[0]!), wanted);
+  return { ...(await vault.publish(resolve(io.cwd, rest[0]!), wanted)), folder: rest[0]! };
 }
+
+/** What kc check reads from a capsule folder: the same files kc publish reads. */
+async function checkInputFromFolder(folder: string): Promise<CheckInput> {
+  const pkg = await packageFrom(folder);
+  const bytes = pkg.entries.get(MANIFEST_PATH);
+  if (bytes === undefined) throw new KcError("validation_failed", `${folder} has no capsule.json; see docs/capsule-format.md`);
+  const manifest = parseManifest(bytes);
+  const canonical = pkg.entries.get(manifest.contents.canonical);
+  if (canonical === undefined) throw new KcError("validation_failed", `${folder} has no ${manifest.contents.canonical}; see docs/capsule-format.md`);
+  return { id: manifest.id, version: manifest.version, trigger: manifest.trigger, canonical: new TextDecoder().decode(canonical) };
+}
+
+function checkInputFromVault(loaded: LoadedVersion): CheckInput {
+  const canonical = loaded.pkg.entries.get(loaded.manifest.contents.canonical);
+  return {
+    id: loaded.record.id,
+    version: loaded.record.version,
+    trigger: loaded.manifest.trigger,
+    canonical: canonical === undefined ? "" : new TextDecoder().decode(canonical),
+  };
+}
+
+const piecesOfAdvice = (findings: readonly Finding[]): string => {
+  const n = adviceCount(findings);
+  return `${n} ${n === 1 ? "piece" : "pieces"} of advice`;
+};
 
 async function exec(io: Io, command: string, args: string[]): Promise<void> {
   const vault = new Vault(defaultVaultPath(io.env));
@@ -114,8 +142,29 @@ async function exec(io: Io, command: string, args: string[]): Promise<void> {
       return;
     }
     case "publish": {
-      const { record, created } = await publishFolder(io, vault, args);
+      const { record, created, folder } = await publishFolder(io, vault, args);
       io.out(created ? `published ${record.id}@${record.version}` : `${record.id}@${record.version} is already in the vault, unchanged`);
+      const findings = checkCapsule(await checkInputFromFolder(abs(folder)));
+      if (adviceCount(findings) > 0) io.out(`${piecesOfAdvice(findings)}; run kc check ${folder}`);
+      return;
+    }
+    case "check": {
+      if (args.length > 1) throw new KcError("validation_failed", "usage: kc check [folder]");
+      if (args.length === 1) {
+        const input = await checkInputFromFolder(abs(args[0]!));
+        for (const line of formatReport(input, checkCapsule(input))) io.out(line);
+        return;
+      }
+      const pins = (await readRepoManifest(io.cwd))?.capsules;
+      if (pins === undefined) {
+        io.out("this repository has no kc.json; nothing to check");
+        return;
+      }
+      await vault.assertExists();
+      const inputs: CheckInput[] = [];
+      for (const pin of pins) inputs.push(checkInputFromVault(await vault.load(await vault.resolve(pin.id, pin.version))));
+      for (const input of inputs) for (const line of formatReport(input, checkCapsule(input))) io.out(line);
+      for (const line of checkSet(inputs)) io.out(line);
       return;
     }
     case "add": {
