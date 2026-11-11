@@ -14,9 +14,11 @@ getting worse and do not ask you to rewrite pages you did not come to change.
   useful input when present; its optional fields are not mandatory sections.
 - R2. Use extra context only when it changes what helps the reader. More context does
   not require a longer introduction, more headings or a copy of every source.
-- R3. Describe only what is true at the commit that lands the page: the behavior,
-  status and prerequisites that exist now, because a reader acts on a page as the
-  truth. State a limit as what the product does not do now, not as what it will do,
+- R3. On every page except a plan or a product requirements document, describe only
+  what is true at the commit that lands the page: the behavior, status and
+  prerequisites that exist now, because a reader acts on that page as the truth,
+  while a plan or a product requirements document describes planned work. State a
+  limit as what the product does not do now, not as what it will do,
   because a promise stays on the page after its plan is dropped. When sources
   conflict, keep the supporting and the refuting evidence, because a reader needs
   both to judge.
@@ -71,12 +73,12 @@ getting worse and do not ask you to rewrite pages you did not come to change.
 - R21. Keep planned work in a plan or a product requirements document that names the
   page it will change, and do not link from a page to planned work, because the page
   must stay true when the plan changes or is dropped.
-- R22. Write each consideration and each rule with its reason on the same page,
-  because a reason kept elsewhere is not changed with the rule, and the reason lets
-  the next reader judge a case nobody foresaw.
-- R23. Leave decision numbers, exact rule lists and other material for agents out of
-  the text of a feature page, and link to it at the end of the page, because a
-  person reads for what matters to their use.
+- R22. Write the reason for each rule and each consideration beside it, on the page
+  that states it, because a reason kept elsewhere is not changed with the rule, and
+  the reason lets the next reader judge a case nobody foresaw.
+- R23. Leave decision references, exact rule lists and other material for agents out
+  of the text of a feature page, and link to that material at the end of the page,
+  because a person reads for what matters to their use.
 
 ## Rationale
 
