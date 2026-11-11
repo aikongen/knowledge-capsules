@@ -1,11 +1,12 @@
 # Documentation layout
 
-Apply these rules when you add, move or name a documentation file, or decide where a repository's documents live. They say where a document goes and what opens it; how its text is written is a separate subject. A repository's own recorded layout wins over these rules, because it records a choice made for that repository.
+Apply these rules when you add, move or name a documentation file, or decide where a repository's documents live. They say where a document goes and what opens it; how its text is written is a separate subject. A repository's own recorded layout wins over these rules, because it records a choice made for that repository. When the repository's own layout names no place for a feature page, put a new one in `docs/features/`. Do not move or rename an existing page, or a section of one, into it, because moving it breaks its links.
 
 ## Where a document goes
 
 - Keep each product's documentation in that product's own repository, because the documentation then changes in the same commit as what it describes.
-- Put each page under `docs/` in the folder that matches its kind: `tutorials/` teaches by doing, `how-to/` solves one task, `reference/` lists facts and `explanation/` says why. The folder tells the reader what kind of help to expect before they open the page. Split a page that mixes two kinds into one page per kind.
+- Put each page under `docs/` in the folder that matches its kind: `tutorials/` teaches by doing, `how-to/` solves one task, `reference/` lists facts, `explanation/` says why, and `features/` holds a feature page, which explains one feature to the person who uses it. The folder tells the reader what kind of help to expect before they open the page. Split a page that mixes two kinds into one page per kind; a feature page is one kind, not a mix.
+- Keep a product's requirements document (PRD) in the repository where the repository's own layout puts it, as the committed plan that every checkout shares. It describes planned behavior and is not held to the rule that a page says only what is true now, because it is the plan, not a page about the product.
 - Keep the README of a package, app or tool beside its manifest, such as its `package.json`, and write it for someone who uses that package. Put instructions for someone who changes the package in a `CONTRIBUTING.md` beside it, because the user and the maintainer need different pages.
 - Write a public repository's root `README.md` for the end user: the problem, the value, how to get it, how to open and use it the first time. Leave clone, build and test commands, project files and module names out of it, and end it with one line that links the maintainer guide, because the root README is the first page a newcomer sees.
 

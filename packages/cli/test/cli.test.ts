@@ -217,7 +217,7 @@ describe("add, remove, update", () => {
     await kc(box, ["export", "aikongen/documentation-guidelines", zip]);
     const other = join(box.root, "vault2");
     const imported = await kc(box, ["add", zip], { vault: other });
-    expect(imported.out).toBe("imported aikongen/documentation-guidelines@1.2.0\nthis repository now uses aikongen/documentation-guidelines@1.2.0");
+    expect(imported.out).toBe("imported aikongen/documentation-guidelines@1.3.0\nthis repository now uses aikongen/documentation-guidelines@1.3.0");
 
     const bad = join(box.root, "bad.zip");
     await writeFile(bad, "not a zip");
