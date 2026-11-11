@@ -18,12 +18,11 @@ stop the documentation from getting worse.
   what is true at the commit that lands the page: the behavior, status and
   prerequisites that exist now, because a reader acts on that page as the truth,
   while a plan or a product requirements document describes planned work. State a
-  limit as what the product does not do now, not as what it will do,
-  because a promise stays on the page after its plan is dropped. Mark no part of a
-  page as planned, proposed or draft, because the mark stays on the page after the
-  plan changes. When sources
-  conflict, keep the supporting and the refuting evidence, because a reader needs
-  both to judge.
+  limit as what the product does not do now, not as what it will do, because a
+  promise stays on the page after its plan is dropped. Mark no part of a page as
+  planned, proposed or draft, because the mark stays on the page after the plan
+  changes. When sources conflict, keep the supporting and the refuting evidence,
+  because a reader needs both to judge.
 - R4. Omit absent optional details rather than inventing them. An observed absence
   comes from a successful read or search. A denied, failed or unavailable read
   leaves the fact UNKNOWN; it does not prove absence. An adequate authoritative
