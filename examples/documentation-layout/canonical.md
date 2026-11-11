@@ -1,6 +1,6 @@
 # Documentation layout
 
-Apply these rules when you add, move or name a documentation file, or decide where a repository's documents live. They say where a document goes and what opens it; how its text is written is a separate subject. A repository's own recorded layout wins over these rules, because it records a choice made for that repository. Put a new feature page in `features/`, and do not move or rename an existing page into it, because moving a page breaks its links.
+Apply these rules when you add, move or name a documentation file, or decide where a repository's documents live. They say where a document goes and what opens it; how its text is written is a separate subject. A repository's own recorded layout wins over these rules, because it records a choice made for that repository. When the repository's own layout names no place for a feature page, put a new one in `docs/features/`. Do not move or rename an existing page, or a section of one, into it, because moving it breaks its links.
 
 ## Where a document goes
 

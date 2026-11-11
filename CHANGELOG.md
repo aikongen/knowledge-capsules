@@ -10,7 +10,7 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ### Changed
 
-- The example capsule `aikongen/documentation-guidelines` 1.3.0 (was 1.2.0), with the same rules in the new layout and coding capsules: a docs page says only what is true now and planned work lives in a plan or PRD; a feature page is a kind of its own (purpose, use with one real example, considerations with reasons, in `features/`); a rule's reason stays on the page; a page reads without a lookup, with no IDs or codes in the text and sources at the bottom; the rules are no longer numbered; the commit that builds a part writes its page. The new rules apply to new pages and to the part of a page a change touches, and existing pages are not moved.
+- The example capsule `aikongen/documentation-guidelines` 1.3.0 (was 1.2.0), with the same rules in the new layout and coding capsules: a docs page says only what is true now and planned work lives in a plan or PRD; a feature page is a kind of its own (purpose, use with one real example, considerations with reasons, in `features/`); a rule's reason stays on the page; a page reads without a lookup, with no rule numbers, decision numbers or other references to look up in the text and sources at the bottom; the rules are no longer numbered; the commit that builds a part writes its page. The new rules apply to new pages and to the part of a page a change touches, and existing pages are not moved.
 
 ## 0.1.0-preview.9 - 2026-11-08
 

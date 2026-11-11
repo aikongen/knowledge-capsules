@@ -2,11 +2,12 @@
 
 ## Applicability
 
-Applies to every Markdown document you write or change. Apply the rules on what is
-true now, on feature pages, on planned work and links, on reasons and on text that
-reads without a lookup to a new page and to each part of an existing page that your
-change edits or makes untrue, and do not rewrite the rest of a page only to meet them,
-because these rules stop the documentation from getting worse.
+Applies to every Markdown document you write or change. On an existing page, apply
+these rules to each part that your change edits or makes untrue, and do not rewrite
+the rest only to meet them, because these rules keep the documentation from getting
+worse and do not ask for a rewrite. Leave a decision record's status and the record
+numbers it supersedes in its opening line, because they tell the reader whether the
+record is in force.
 
 ## Rules
 
@@ -15,14 +16,15 @@ because these rules stop the documentation from getting worse.
   useful input when present; its optional fields are not mandatory sections.
 - Use extra context only when it changes what helps the reader. More context does not
   require a longer introduction, more headings or a copy of every source.
-- On every page except a plan or a product requirements document, describe only what
-  is true at the commit that lands the page: the behavior, status and prerequisites
-  that exist now, because a reader acts on that page as the truth, while a plan or a
-  product requirements document describes planned work. State a limit as what the
-  product does not do now, not as what it will do, because a promise stays on the page
-  after its plan is dropped. Mark no part of a page as planned, proposed or draft,
-  because the mark stays on the page after the plan changes. When sources conflict,
-  keep the supporting and the refuting evidence, because a reader needs both to judge.
+- On every page except a plan, which is never committed, or a product requirements
+  document, describe only what is true at the commit that lands the page: the
+  behavior, status and prerequisites that exist now, because a reader acts on that
+  page as the truth, while a plan or a product requirements document describes
+  planned work. State a limit as what the product does not do now, not as what it
+  will do, because a promise stays on the page after its plan is dropped. Mark no
+  part of a page as planned, proposed or draft, because the mark stays on the page
+  after the plan changes. When sources conflict, keep the supporting and the
+  refuting evidence, because a reader needs both to judge.
 - Omit absent optional details rather than inventing them. An observed absence comes
   from a successful read or search. A denied, failed or unavailable read leaves the
   fact UNKNOWN; it does not prove absence. An adequate authoritative alternative may
@@ -81,11 +83,15 @@ because these rules stop the documentation from getting worse.
 - Write the reason for each rule and each consideration beside it, on the page that
   states it, because a reason kept elsewhere is not changed with the rule, and the
   reason lets the next reader judge a case nobody foresaw.
-- Write a page that a reader understands without looking anything up: leave IDs, rule
-  numbers, decision numbers and other codes out of the text, and name each thing by
-  what it is, because a reader should not need a dictionary to read the page. Put
-  links to sources, evidence, decision records and other material for agents at the
-  bottom of the page, because in the text they bury what the reader came for.
+- Write a page that a reader understands without looking anything up: name each thing
+  by what it is, and leave out of the text every reference the reader would have to
+  look up, such as a rule number, a decision number or the ID of another document,
+  because a reader should not need a dictionary to read the page and such a reference
+  can change while the page does not. Keep a name the reader types or sees, such as a
+  command, a flag, a setting, a host or an error code, in the text in code font,
+  because the reader needs it to act. Put links to sources, evidence, decision
+  records and other material for agents at the bottom of the page, because in the
+  text they bury what the reader came for.
 
 ## Rationale
 
@@ -95,8 +101,8 @@ invented completeness. Missing evidence should limit only the claims it affects.
 page that describes only what is true now can be trusted without checking what was
 planned. One kind per page lets a reader trust what kind of help they are getting; a
 feature page is one kind, written for the person who uses the feature. A reason kept
-beside its rule keeps the why for the next reader. Text without codes reads without a
-dictionary. Plain, unambiguous sentences are read once; a sentence with two readings
-is read twice and sometimes misread.
+beside its rule keeps the why for the next reader. Text that names things instead of
+citing numbers reads without a dictionary. Plain, unambiguous sentences are read
+once; a sentence with two readings is read twice and sometimes misread.
 
 Applies to `**/*.md`.
