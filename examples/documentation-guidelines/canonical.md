@@ -19,7 +19,9 @@ getting worse and do not ask you to rewrite pages you did not come to change.
   prerequisites that exist now, because a reader acts on that page as the truth,
   while a plan or a product requirements document describes planned work. State a
   limit as what the product does not do now, not as what it will do,
-  because a promise stays on the page after its plan is dropped. When sources
+  because a promise stays on the page after its plan is dropped. Mark no part of a
+  page as planned, proposed or draft, because the mark stays on the page after the
+  plan changes. When sources
   conflict, keep the supporting and the refuting evidence, because a reader needs
   both to judge.
 - R4. Omit absent optional details rather than inventing them. An observed absence
@@ -71,8 +73,11 @@ getting worse and do not ask you to rewrite pages you did not come to change.
 - R20. A pull request description is a briefing a reviewer reads in under a minute.
   Link logs, SHA lists and metric tables instead of pasting them.
 - R21. Keep planned work in a plan or a product requirements document that names the
-  page it will change, and do not link from a page to planned work, because the page
-  must stay true when the plan changes or is dropped.
+  page it will change. Link from a page to no plan and to no planned work, because
+  the page must stay true when the plan changes or is dropped. Let a documentation
+  index list the product's requirements document as the product's plan, because it
+  is the committed plan that every clone can read. Link from a page to no file that
+  is not committed to the repository, because another clone cannot open it.
 - R22. Write the reason for each rule and each consideration beside it, on the page
   that states it, because a reason kept elsewhere is not changed with the rule, and
   the reason lets the next reader judge a case nobody foresaw.
