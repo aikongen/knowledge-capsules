@@ -10,6 +10,7 @@ Apply these rules whenever you write, change, test or review code. A repository'
 - Add no abstraction, dependency or boilerplate nobody asked for. Wait for two real consumers before adding an abstraction, unless safety, authority or interoperability needs it sooner, because an abstraction with one consumer only guesses at the second.
 - Prefer deletion to addition, simple to general and boring to clever, because the next reader has to understand every line you keep.
 - When you replace something, update its callers, tests and documentation, then delete the old path, so two ways of doing one thing do not drift apart.
+- When your change builds a part that a plan describes, write that part's description and its reasons on its documentation page in the same commit, because the page then becomes true together with the code and the why is not left behind in the plan.
 - Keep compatibility only for an identified commitment or a real consumer's constraint, because compatibility kept for nobody is code kept for nobody.
 
 ## Write the code

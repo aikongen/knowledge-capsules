@@ -8,6 +8,11 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 - Three example capsules: `aikongen/general-coding-conventions` 1.0.1 (writing, testing and landing code), `aikongen/documentation-layout` 1.0.1 (where a document goes and its front matter) and `aikongen/macos-design-guidelines` 1.0.1 (native macOS interfaces in SwiftUI).
 
+### Changed
+
+- The example capsules `aikongen/documentation-guidelines` 1.3.0, `aikongen/documentation-layout` 1.1.0 and `aikongen/general-coding-conventions` 1.1.0: a docs page says only what is true now and planned work lives in a plan or PRD; a feature page is a kind of its own (purpose, use, considerations with reasons, in `features/`); a rule's reason stays on the page.
+- `general-coding-conventions` moves a part's description and reasons onto its page in the commit that builds it. The new rules apply to new pages and to the part of a page a change touches.
+
 ## 0.1.0-preview.9 - 2026-11-08
 
 ### Added

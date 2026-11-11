@@ -2,7 +2,10 @@
 
 ## Applicability
 
-Applies to every Markdown document you write or change.
+Applies to every Markdown document you write or change. Apply R3, R11, R21, R22 and R23
+to a new page and to the part of an existing page that your change touches, and leave
+the rest of an existing page as it is, because these rules stop the documentation from
+getting worse and do not ask you to rewrite pages you did not come to change.
 
 ## Rules
 
@@ -11,9 +14,12 @@ Applies to every Markdown document you write or change.
   useful input when present; its optional fields are not mandatory sections.
 - R2. Use extra context only when it changes what helps the reader. More context does
   not require a longer introduction, more headings or a copy of every source.
-- R3. Describe supported behavior, status and prerequisites accurately. Keep current
-  behavior, proposals and historical evidence distinct. Preserve supporting and
-  refuting evidence when sources conflict; do not select only the convenient one.
+- R3. Describe only what is true at the commit that lands the page: the behavior,
+  status and prerequisites that exist now, because a reader acts on a page as the
+  truth. State a limit as what the product does not do now, not as what it will do,
+  because a promise stays on the page after its plan is dropped. When sources
+  conflict, keep the supporting and the refuting evidence, because a reader needs
+  both to judge.
 - R4. Omit absent optional details rather than inventing them. An observed absence
   comes from a successful read or search. A denied, failed or unavailable read
   leaves the fact UNKNOWN; it does not prove absence. An adequate authoritative
@@ -37,9 +43,12 @@ Applies to every Markdown document you write or change.
 - R10. Apply these rules to every Markdown file you write or change. When a repository
   names a different standard for one audience, such as a developer guide or an agent
   instruction file, follow that standard there and these rules everywhere else.
-- R11. Give a document one mode: a tutorial teaches by doing, a how-to reaches a goal,
-  a reference states facts for lookup, an explanation answers why. Split and link
-  rather than mix them.
+- R11. Give a page one kind, and split and link rather than mix kinds, because a
+  reader must know what help to expect: a tutorial teaches by doing, a how-to reaches
+  a goal, a reference states facts for lookup, an explanation answers why, and a
+  feature page explains one feature to the person who uses it. Let a feature page
+  hold the feature's purpose, its use and its considerations together, because a
+  person learns a feature from one page.
 - R12. Write to the reader as "you", in the present tense. Name who does what; use
   the passive only when the actor is unknown or beside the point.
 - R13. Write an instruction as a command, one per sentence, with its condition or
@@ -59,13 +68,25 @@ Applies to every Markdown document you write or change.
   command that regenerates it.
 - R20. A pull request description is a briefing a reviewer reads in under a minute.
   Link logs, SHA lists and metric tables instead of pasting them.
+- R21. Keep planned work in a plan or a product requirements document that names the
+  page it will change, and do not link from a page to planned work, because the page
+  must stay true when the plan changes or is dropped.
+- R22. Write each consideration and each rule with its reason on the same page,
+  because a reason kept elsewhere is not changed with the rule, and the reason lets
+  the next reader judge a case nobody foresaw.
+- R23. Leave decision numbers, exact rule lists and other material for agents out of
+  the text of a feature page, and link to it at the end of the page, because a
+  person reads for what matters to their use.
 
 ## Rationale
 
 A reader needs relevant, trustworthy guidance and a clear next step. A short
 introduction and on-demand detail serve that outcome better than repeated rules or
 invented completeness. Missing evidence should limit only the claims it affects.
-One mode per page lets a reader trust what kind of help they are getting. Plain,
+A page that describes only what is true now can be trusted without checking what
+was planned. One kind per page lets a reader trust what kind of help they are
+getting; a feature page is one kind, written for the person who uses the feature.
+A reason kept beside its rule keeps the why for the next reader. Plain,
 unambiguous sentences are read once; a sentence with two readings is read twice
 and sometimes misread.
 
