@@ -3,9 +3,9 @@
 ## Applicability
 
 Applies to every Markdown document you write or change. Apply R3, R11, R21, R22 and R23
-to a new page and to the part of an existing page that your change touches, and leave
-the rest of an existing page as it is, because these rules stop the documentation from
-getting worse and do not ask you to rewrite pages you did not come to change.
+to a new page and to each part of an existing page that your change edits or makes
+untrue, and do not rewrite the rest of a page only to meet them, because these rules
+stop the documentation from getting worse.
 
 ## Rules
 
@@ -50,9 +50,10 @@ getting worse and do not ask you to rewrite pages you did not come to change.
 - R11. Give a page one kind, and split and link rather than mix kinds, because a
   reader must know what help to expect: a tutorial teaches by doing, a how-to reaches
   a goal, a reference states facts for lookup, an explanation answers why, and a
-  feature page explains one feature to the person who uses it. Let a feature page
-  hold the feature's purpose, its use and its considerations together, because a
-  person learns a feature from one page.
+  feature page explains one feature to the person who uses it. Write a feature page
+  in this order: what the feature solves and for whom, how to use it with one real
+  example, then its considerations, because a person reads from the top and stops
+  once they have what they need.
 - R12. Write to the reader as "you", in the present tense. Name who does what; use
   the passive only when the actor is unknown or beside the point.
 - R13. Write an instruction as a command, one per sentence, with its condition or
@@ -73,11 +74,11 @@ getting worse and do not ask you to rewrite pages you did not come to change.
 - R20. A pull request description is a briefing a reviewer reads in under a minute.
   Link logs, SHA lists and metric tables instead of pasting them.
 - R21. Keep planned work in a plan or a product requirements document that names the
-  page it will change. Link from a page to no plan and to no planned work, because
-  the page must stay true when the plan changes or is dropped. Let a documentation
-  index list the product's requirements document as the product's plan, because it
-  is the committed plan that every clone can read. Link from a page to no file that
-  is not committed to the repository, because another clone cannot open it.
+  page it will change, because the reference then points from the plan to the page.
+  Link from a page to no plan, the product requirements document included, because
+  the page must stay true when the plan changes or is dropped. Link from a page to no
+  file that exists only in your checkout, such as a git-ignored file, because another
+  clone cannot open it.
 - R22. Write the reason for each rule and each consideration beside it, on the page
   that states it, because a reason kept elsewhere is not changed with the rule, and
   the reason lets the next reader judge a case nobody foresaw.
