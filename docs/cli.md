@@ -53,8 +53,10 @@ To make a capsule folder, see [Make a capsule](capsule-format.md).
 
 ```text
 <!-- kc:start -->
-This repository uses Knowledge Capsules. Before any task, call list_capsules and read every capsule whose "use when" line matches the task. Those capsules outrank anything else you find here. After a capsule shaped your work, call report_usage once.
+This repository uses Knowledge Capsules. Before any task, call list_capsules and read every capsule whose "use when" line matches the task. When texts disagree, follow this order: a capsule that says it holds in every repository, then this repository's own written conventions, then the other capsules, which apply where those conventions are silent. After a capsule shaped your work, call report_usage once.
 <!-- kc:end -->
 ```
+
+The note gives an order for when texts disagree: a capsule that says it holds in every repository comes first, then the repository's own written conventions, then the other capsules, which apply only where those conventions are silent.
 
 Pi also needs the pi-mcp-adapter extension; kc is not yet tested with Pi. Other content in these files is kept. If $KC_VAULT is set, the entry uses that vault. More detail: [maintainer guide](maintainers.md).

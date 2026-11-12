@@ -6,10 +6,13 @@ This file records user-visible changes. The format follows [Keep a Changelog](ht
 
 ### Added
 
+- The example capsule `aikongen/documentation-core` 1.0.0: the rules that hold in every repository. A page describes only what is true now and planned work lives in a plan that names the page; the reason stands beside the rule; documentation changes in the same commit as the code; process records stay out of the repository; `docs/README.md` is the index; a repository's own documentation convention lives at `docs/conventions/documentation.md`.
 - Three example capsules: `aikongen/general-coding-conventions` 1.1.0 (writing, testing and landing code), `aikongen/documentation-layout` 1.1.0 (where a document goes and its front matter) and `aikongen/macos-design-guidelines` 1.0.1 (native macOS interfaces in SwiftUI).
 
 ### Changed
 
+- The `kc connect` note now gives an order for when texts disagree: a capsule that says it holds in every repository, then the repository's own written conventions, then the other capsules, which apply where those conventions are silent. It no longer says capsules outrank everything else. Run `kc connect` again to replace the note in place.
+- The example capsules `aikongen/documentation-guidelines` 2.0.0 (was 1.3.0) and `aikongen/documentation-layout` 2.0.0 (was 1.1.0) are recommendations that apply where a repository's own convention is silent, with the core rules moved to documentation-core. "Give a page one kind" and the folder-per-kind tree are dropped. A page is complete for its unit, chosen by counting a reader's path; one fact has one owning page. New: a part on writing a repository's own convention, and a layout per way of reading (folder, site, page delivered alone).
 - The example capsule `aikongen/documentation-guidelines` 1.3.0 (was 1.2.0), with the same rules in the new layout and coding capsules: a docs page says only what is true now and planned work lives in a plan or PRD; a feature page is a kind of its own (purpose, use with one real example, considerations with reasons, in `features/`); a rule's reason stays on the page; a page reads without a lookup, with no rule numbers, decision numbers or other references to look up in the text and sources at the bottom; the rules are no longer numbered; the commit that builds a part writes its page. The new rules apply to new pages and to the part of a page a change touches, and existing pages are not moved.
 
 ## 0.1.0-preview.9 - 2026-11-08

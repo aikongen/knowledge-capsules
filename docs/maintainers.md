@@ -15,7 +15,7 @@ bun test         # all tests
 
 The README banner is `assets/banner.png`, rendered from `assets/banner-source.html` with headless Chrome (`--window-size=1600,400 --force-device-scale-factor=2 --screenshot`), then reduced to 192 colours with `magick -colors 192 PNG8:`.
 
-The README pictures are `assets/scenes/*.html`, rendered to the PNG beside each with headless Chrome (`--window-size=1600,1000 --force-device-scale-factor=1 --virtual-time-budget=6000 --screenshot`). The text in them is real `kc` output from a scratch vault; capture it again when the output changes.
+The README pictures are `assets/scenes/*.html`, rendered to the PNG beside each with headless Chrome (`--window-size=1600,1000 --force-device-scale-factor=1 --virtual-time-budget=6000 --screenshot`; `agent-note` is 1600 by 1300, because its text is longer). The text in them is real `kc` output from a scratch vault; capture it again when the output changes.
 
 Social preview: upload assets/social-preview.png under Settings → General → Social preview. It is rendered from `assets/social-preview-source.html` at `--window-size=1280,640 --force-device-scale-factor=1`.
 
