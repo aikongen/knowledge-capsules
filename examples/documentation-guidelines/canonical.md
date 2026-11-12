@@ -63,4 +63,4 @@ Write a convention only where the repository differs from these recommendations,
 
 ## Rationale
 
-A page complete for its unit serves every way of reading, and matters most where there is no menu: a grep finds one page, and a page delivered alone keeps its content. A convention that records only its departures stays short enough to keep true.
+A page complete for its unit serves every way of reading, and matters most where there is no menu: a grep finds one page, and a page delivered alone keeps its content.
