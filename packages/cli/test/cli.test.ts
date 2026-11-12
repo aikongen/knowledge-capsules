@@ -217,7 +217,7 @@ describe("add, remove, update", () => {
     await kc(box, ["export", "aikongen/documentation-guidelines", zip]);
     const other = join(box.root, "vault2");
     const imported = await kc(box, ["add", zip], { vault: other });
-    expect(imported.out).toBe("imported aikongen/documentation-guidelines@1.3.0\nthis repository now uses aikongen/documentation-guidelines@1.3.0");
+    expect(imported.out).toBe("imported aikongen/documentation-guidelines@2.0.0\nthis repository now uses aikongen/documentation-guidelines@2.0.0");
 
     const bad = join(box.root, "bad.zip");
     await writeFile(bad, "not a zip");
@@ -409,6 +409,23 @@ describe("connect", () => {
     expect(skipped.code).toBe(0);
     expect(skipped.out).not.toContain("left a note");
     expect(await Bun.file(join(other.project, "CLAUDE.md")).exists()).toBe(false);
+  });
+});
+
+describe("the agent note quoted in the repository", () => {
+  test("docs/cli.md and the root CLAUDE.md contain NOTE_TEXT exactly", async () => {
+    const { NOTE_TEXT } = await import("../src/connect.ts");
+    for (const file of ["docs/cli.md", "CLAUDE.md"]) {
+      expect(await readFile(join(REPO, file), "utf8")).toContain(NOTE_TEXT);
+    }
+    const scene = (await readFile(join(REPO, "assets/scenes/agent-note.html"), "utf8"))
+      .replace(/<[^>]*>/g, "")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, "&")
+      .replace(/\s+/g, " ");
+    expect(scene).toContain(NOTE_TEXT);
   });
 });
 

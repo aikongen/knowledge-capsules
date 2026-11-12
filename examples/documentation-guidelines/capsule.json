@@ -1,13 +1,17 @@
 {
   "id": "aikongen/documentation-guidelines",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "kind": "guidelines",
-  "trigger": "Use when writing, changing or reviewing Markdown documentation for any reader, even when the request is a code change that also updates a documentation page.",
+  "trigger": "Use when writing, changing or reviewing Markdown documentation, a repository's own documentation convention included, even when the request is a code change that also updates a documentation page.",
   "scope": {
     "includes": [
-      "accuracy of behaviour, status and prerequisites"
+      "the unit of a page and the order of its parts",
+      "accuracy of behaviour, status and prerequisites",
+      "writing a repository's own documentation convention"
     ],
     "excludes": [
+      "the rules that hold in every repository, such as describing only what is true now",
+      "which folder a page goes in, and a site's front matter",
       "files written for one audience under their own standard, such as a developer guide or an agent instruction file"
     ]
   },

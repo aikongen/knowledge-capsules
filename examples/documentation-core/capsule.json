@@ -1,0 +1,24 @@
+{
+  "id": "aikongen/documentation-core",
+  "version": "1.0.0",
+  "kind": "guidelines",
+  "trigger": "Use when writing, changing, moving or reviewing a repository's documentation, even when the request is a code change that makes a page untrue, or only asks to save a plan, a review or a note.",
+  "scope": {
+    "includes": [
+      "what a page may describe, and where planned work lives",
+      "keeping the reason beside the rule",
+      "updating documentation in the same commit as the code",
+      "where process records go",
+      "where the documentation index and the repository's own documentation convention live",
+      "the order between these rules, the repository's convention and the documentation recommendations"
+    ],
+    "excludes": [
+      "how the text of a page is written",
+      "which folder a page goes in, and a site's front matter",
+      "agent instruction files, changelogs and capsule content"
+    ]
+  },
+  "contents": {
+    "canonical": "canonical.md"
+  }
+}
