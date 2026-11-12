@@ -23,11 +23,11 @@ On an existing page, apply these recommendations to each part your change edits 
 
 ## Evidence and accuracy
 
-- Start from the intended reader, their task and the actual source. Read the authoritative pointers needed for a claim before making it. Project context is useful input when present; its optional fields are not mandatory sections.
-- Use extra context only when it changes what helps the reader. More context does not require a longer introduction, more headings or a copy of every source.
+- Start from the intended reader, their task and the actual source. Read the authoritative pointers needed for a claim before making it. Optional fields of project context are not mandatory sections.
+- Use extra context only when it changes what helps the reader.
 - When sources conflict, keep the supporting and the refuting evidence, because a reader needs both to judge.
 - Omit absent optional details rather than inventing them. An observed absence comes from a successful read or search. A denied, failed or unavailable read leaves the fact UNKNOWN; it does not prove absence. An adequate authoritative alternative may resolve that uncertainty.
-- Keep unexecuted checks NOT_RUN. Source inspection can support a command example, but cannot prove that installation, first use, native loading or enforcement succeeded. Name the exact candidate and material limits when reporting evidence.
+- Keep unexecuted checks NOT_RUN. Source inspection can support a command example, but cannot prove that installation, first use, native loading or enforcement succeeded. Name the exact candidate and its limits when reporting evidence.
 - Continue independent work when a required fact is UNKNOWN. Withhold the dependent claim or PASS until adequate evidence resolves it.
 - Make every count or tree claim true at the commit that lands it, and give the command that regenerates it.
 - Change authored sources and regenerate their projections with the project's documented tools.
@@ -40,7 +40,7 @@ On an existing page, apply these recommendations to each part your change edits 
 - Apply these recommendations to every Markdown file you write or change. When a repository names a different standard for one audience, such as a developer guide or an agent instruction file, follow that standard there and these recommendations everywhere else.
 - Keep the entry point brief, with reachable detail for the reader's next task, because a reader decides from the first lines whether they are in the right place.
 - Write to the reader as "you", in the present tense. Name who does what, because a reader acts on who does it; use the passive only when the actor is unknown or beside the point.
-- Write an instruction as a command, one per sentence, with its condition or warning first: "To delete the page, run ...". Put the common case before the exceptions. Do not write "simply", "easy" or "quickly" in a procedure.
+- Write an instruction as a command, one per sentence, with its condition or warning first: "To delete the page, run ...". Put the common case before the exceptions, because most readers stop at it. Do not write "simply", "easy" or "quickly" in a procedure, because a reader who struggles then feels at fault.
 - Use the short, everyday word, and cut every word that does no work. Write the real symbol, file, flag, command or message in code font, not a description of it, because a reader with grep finds a page by the literal string.
 - Call each thing by one name and each action by one verb throughout a document, because a second name reads as a second thing.
 - Keep "only" and "not" next to the word they change. Make each "it", "this" and "they" point at one obvious noun. End a sentence instead of joining clauses with a dash, and write "a, b, or both" instead of a slash.
@@ -64,5 +64,3 @@ Write a convention only where the repository differs from these recommendations,
 ## Rationale
 
 A page complete for its unit serves every way of reading, and matters most where there is no menu: a grep finds one page, and a page delivered alone keeps its content. A convention that records only its departures stays short enough to keep true.
-
-Applies to `**/*.md`.
