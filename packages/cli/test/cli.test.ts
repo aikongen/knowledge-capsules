@@ -418,6 +418,14 @@ describe("the agent note quoted in the repository", () => {
     for (const file of ["docs/cli.md", "CLAUDE.md"]) {
       expect(await readFile(join(REPO, file), "utf8")).toContain(NOTE_TEXT);
     }
+    const scene = (await readFile(join(REPO, "assets/scenes/agent-note.html"), "utf8"))
+      .replace(/<[^>]*>/g, "")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, "&")
+      .replace(/\s+/g, " ");
+    expect(scene).toContain(NOTE_TEXT);
   });
 });
 

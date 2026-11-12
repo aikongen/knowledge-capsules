@@ -2,7 +2,7 @@
 
 ## What these are
 
-These are recommendations for where a document goes and how readers reach it, each with its reason. Apply them when you add, move or name a documentation file, or decide where a repository's documents live. A repository's own recorded layout, written in its documentation convention, wins over them, because it records a choice made for that repository; they apply where it is silent, including in a repository that has recorded no layout. The rules that hold in every repository (the documentation core, such as keeping process records out of the repository and `docs/README.md` as the index) stand above both.
+These are recommendations for where a document goes and how readers reach it, each with its reason. Apply them when you add, move or name a documentation file, or decide where a repository's documents live. A repository's own recorded layout, written in its documentation convention, wins over them, because it records a choice made for that repository; they apply where it is silent, including in a repository that has recorded no layout. The rules that hold in every repository, in the capsule `aikongen/documentation-core` (such as keeping process records out of the repository and `docs/README.md` as the index), stand above both. When you update to these recommendations, add that capsule too, because the rules it holds are no longer here.
 
 A repository departs from a recommendation by writing its choice and the reason in that convention, never by a session deciding silently, because a silent departure looks like a mistake to the next reader and the next session undoes it. Do not move or rename an existing page, or a section of one, only to meet these recommendations, because moving it breaks its links.
 
@@ -27,9 +27,9 @@ The same files can be read in several ways, and each way needs something differe
 ## Decision records
 
 - Record each decision set in `docs/decisions/` as one file named `NNNN-slug.md` with a four-digit number, and never reuse a number, because other pages and commits cite records by number.
-- Open each record, after any front matter, with a heading and a line that gives the date, the status, what it supersedes and its source. The status is `proposed`, `accepted by the owner` with the date and where, or `superseded by NNNN`, so a reader can tell at once whether the record is in force.
+- Write a record into `docs/decisions/` only once the owner has accepted the decision. A decision not yet taken is planned work and lives in a plan, because a page in the repository describes only what is true now.
+- Open each record, after any front matter, with a heading and a line that gives the date, the status, what it supersedes and its source. The status is `accepted by the owner` with the date and where, or `superseded by NNNN`, so a reader can tell at once whether the record is in force. An existing record with the status `proposed` keeps it until the owner decides, and nothing in the repository acts on it as approved.
 - Let the newest record win. A record that reverses an earlier one names it, as in `Supersedes: NNNN item N`, and changes the older file's status line in the same commit. Keep the older text, so the history stays readable and nothing is deleted. Only the owner reverses a decision; an agent writes the superseding record when the owner asks, never on its own, because a reversal is itself a decision.
-- Treat a record that is not yet accepted as `proposed`, and nothing in the repository acts on it as approved, because only the owner's acceptance makes a decision.
 
 ## Front matter
 

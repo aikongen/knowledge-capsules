@@ -2,7 +2,7 @@
   "id": "aikongen/documentation-guidelines",
   "version": "2.0.0",
   "kind": "guidelines",
-  "trigger": "Use when writing, changing or reviewing Markdown documentation for any reader, a repository's own documentation convention included, even when the request is a code change that also updates a documentation page.",
+  "trigger": "Use when writing, changing or reviewing Markdown documentation, a repository's own documentation convention included, even when the request is a code change that also updates a documentation page.",
   "scope": {
     "includes": [
       "the unit of a page and the order of its parts",
