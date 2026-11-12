@@ -57,6 +57,6 @@ This repository uses Knowledge Capsules. Before any task, call list_capsules and
 <!-- kc:end -->
 ```
 
-The note gives an order for when texts disagree: a capsule that says it holds in every repository comes first, then the repository's own written conventions, then the other capsules, which apply only where those conventions are silent.
+A repository's own written conventions win over a shared capsule because they record choices made for that repository, and a capsule that says it holds in every repository stays first because a repository cannot set it aside.
 
 Pi also needs the pi-mcp-adapter extension; kc is not yet tested with Pi. Other content in these files is kept. If $KC_VAULT is set, the entry uses that vault. More detail: [maintainer guide](maintainers.md).

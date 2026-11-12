@@ -2,7 +2,7 @@
   "id": "aikongen/documentation-layout",
   "version": "2.0.0",
   "kind": "guidelines",
-  "trigger": "Use when deciding where a document goes in a repository: adding, moving or naming a page or decision record, even when the request only asks to save a plan, a review or a note.",
+  "trigger": "Use when deciding where a document goes in a repository: adding, moving or naming a page or decision record, or laying out documentation for a folder, a site or a page delivered alone.",
   "scope": {
     "includes": [
       "which folder a document goes in, and its name",

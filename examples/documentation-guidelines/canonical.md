@@ -2,11 +2,11 @@
 
 ## What these are
 
-These are recommendations for writing Markdown documentation, each with its reason. They apply wherever the repository's own documentation convention is silent, including in a repository that has written no convention. Where the convention speaks, it wins, because it records a choice made for that repository. The rules that hold in every repository (the documentation core: only what is true now, the reason beside the rule, the documentation moves with the code, process records stay out) stand above both, and no convention sets them aside.
+These are recommendations for writing Markdown documentation, each with its reason. They apply wherever the repository's own documentation convention is silent, including in a repository that has written no convention. Where the convention speaks, it wins, because it records a choice made for that repository. The rules that hold in every repository (the documentation core, such as describing only what is true now and keeping the reason beside the rule) stand above both, whether or not a check enforces them, and no convention sets them aside.
 
 A repository departs from a recommendation by writing its choice and the reason in its convention. A session never departs silently, because a silent departure looks like a mistake to the next reader and the next session undoes it.
 
-A rule is enforced only when a check fails on it, such as a test or a linter at error level that stops the commit. The rest of a convention, and every recommendation here, is guidance that writers and agents follow and reviewers read for, because nothing stops a change that breaks it.
+A rule of a convention is enforced only when a check fails on it, such as a test or a linter at error level that stops the commit. The rest of the convention, and every recommendation here, is guidance that writers and agents follow and reviewers read for, because nothing stops a change that breaks it.
 
 On an existing page, apply these recommendations to each part your change edits or makes untrue, and do not rewrite the rest only to meet them, because they keep the documentation from getting worse and do not ask for a rewrite. Leave a decision record's status and the record numbers it supersedes in its opening line, because they tell the reader whether the record is in force.
 
@@ -14,8 +14,8 @@ On an existing page, apply these recommendations to each part your change edits 
 
 - Make a page complete for its unit, so it can be read alone: a reader who lands on it from search, a grep or a link, or receives it on its own, finds everything about its unit there, because a reader who must assemble a fact from several pages misses one of them.
 - The unit is the repository's choice: a thing a reader looks for, such as a command, a step or a setting, or a task, such as adding a domain or rotating a password. Choose it by counting a reader's path: take two real tasks, count the pages a reader opens for each with one candidate unit and with the other, and keep the unit with the shorter path. Record the unit and the reason in the repository's convention, because the next writer must cut new pages the same way.
-- A worked example. In one repository, adding a step touched four files. For the task "add a step that runs my tests", a short page per thing with a separate page per option took a reader through four to six pages; one complete page per step took one. That repository chose one complete page per thing its user thinks in. Another repository may find that the task is its unit, for example when each task is done by a different person with a different authority.
-- Order a page from short to exact, so a reader stops where they have enough: the name and one sentence, what it solves and for whom, how to use it with one real example, every option, how it behaves, what to keep in mind with each reason, and related pages. A page that explains a feature to the person who uses it follows the first part of that order: what the feature solves and for whom, how to use it with one real example, then its considerations, because a person reads from the top and stops once they have what they need.
+- A worked example. In one repository, adding a step touched four files. For the task "add a step that runs my tests", a short page per thing with a separate page per option took a reader through four to six pages; one complete page per step took one. That repository chose one complete page per thing its user thinks in, ordered as the name and one sentence, what it is, how to add one with one real example, every option, how it behaves, what to keep in mind with each reason, and related pages. Another repository may find that the task is its unit, for example when each task is done by a different person with a different authority.
+- Order a page from short to exact, because a person reads from the top and stops once they have what they need. Write a page that explains a feature to the person who uses it in this order: what the feature solves and for whom, how to use it with one real example, then its considerations, each with its reason.
 - Give each fact one owning page: the page of the unit it belongs to. Another page that needs the fact says it in one line and links to the owning page, because nothing keeps repeated prose in agreement, and two copies of a fact drift until one is wrong. The one line keeps a page that is read alone complete enough to act on.
 - Splitting pages by kind (a tutorial, a how-to, a reference, an explanation, each on its own page) is not used, because a page complete for its unit holds what, how and why together, and a reader of one thing would otherwise open a page of each kind.
 
@@ -29,6 +29,8 @@ On an existing page, apply these recommendations to each part your change edits 
 - Continue independent work when a required fact is UNKNOWN. Withhold the dependent claim or PASS until adequate evidence resolves it.
 - Make every count or tree claim true at the commit that lands it, and give the command that regenerates it.
 - Change authored sources and regenerate their projections with the project's documented tools.
+- Before you commit, search the documentation for each name your change touches, such as a path, a command, a setting or a host, and correct each sentence your change makes untrue, because a sentence on another page goes stale without anyone seeing it.
+- When you find a rule with no recorded reason, do not invent one: say so in your report, because an invented reason reads as the owner's.
 - Verify links, local references and examples relevant to the changed surface. Use the consumer's actual corpus, navigation, build and rendered checks for a documentation site. Record each impacted page as updated, verified unchanged, or not needed with a reason; unavailable change history remains unverified.
 
 ## Writing the text
@@ -50,12 +52,12 @@ On an existing page, apply these recommendations to each part your change edits 
 
 Write a convention only where the repository differs from these recommendations, and only what differs, because a copy of the shared text drifts from it and a later change to the shared text no longer reaches the copy. Make these six decisions and record each with its reason. The recommended answer stands after each.
 
-1. **Who reads the documentation.** Name each reader, such as the person who uses the product, the maintainer and an agent with grep, and the task each one comes with, because every other decision follows from the reader.
+1. **Who reads the documentation.** The person who uses the product, the maintainer and an agent with grep, each named with the task they come with, because every other decision follows from the reader.
 2. **How the documentation is browsed.** As a folder in the repository, which works with no menu. Name a site, or pages delivered alone to an agent, only where they exist today, because each way of reading adds layout rules of its own.
-3. **The unit of a page.** Count a reader's path on two real tasks, as described above, and record the unit and the reason.
-4. **The parts of a page and their order.** From short to exact, as described above.
+3. **The unit of a page.** A thing the reader looks for, unless a count of a reader's path on two real tasks favours the task; record the count as the reason.
+4. **The parts of a page and their order.** From short to exact: what it solves and for whom, how to use it with one real example, then the exact detail and the considerations with their reasons.
 5. **Where reasons stand.** Beside the rule or choice they explain, on the page that states it.
-6. **What a check fails on.** Start with what a test can read from the text: no planned wording on a page, no link to a plan or to a git-ignored file, and links that resolve. Name the test, and call the rest of the convention guidance, because a rule that nothing checks is a recommendation whatever the convention calls it.
+6. **What a check fails on.** Start with what a test can read from the text: no planned wording on a page, no link to a plan or to a git-ignored file, and links that resolve. Name the test, and call the rest of the convention guidance, because a convention's rule that nothing checks is followed only as far as writers remember it.
 
 ## Rationale
 

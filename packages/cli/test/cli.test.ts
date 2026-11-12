@@ -412,6 +412,15 @@ describe("connect", () => {
   });
 });
 
+describe("the agent note quoted in the repository", () => {
+  test("docs/cli.md and the root CLAUDE.md contain NOTE_TEXT exactly", async () => {
+    const { NOTE_TEXT } = await import("../src/connect.ts");
+    for (const file of ["docs/cli.md", "CLAUDE.md"]) {
+      expect(await readFile(join(REPO, file), "utf8")).toContain(NOTE_TEXT);
+    }
+  });
+});
+
 describe("publish a research capsule that declares a profile", () => {
   test("is stored once and leaves the vault usable for status and later publishes", async () => {
     const box = await fresh();

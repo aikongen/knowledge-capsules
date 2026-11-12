@@ -2,22 +2,22 @@
 
 ## What these are
 
-These are recommendations for where a document goes and how readers reach it, each with its reason. Apply them when you add, move or name a documentation file, or decide where a repository's documents live. A repository's own recorded layout wins over them, because it records a choice made for that repository; they apply where it is silent, including in a repository that has recorded no layout. The rules that hold in every repository (the documentation core: process records stay out of the repository, `docs/README.md` is the index, the repository's own convention has one fixed path) stand above both.
+These are recommendations for where a document goes and how readers reach it, each with its reason. Apply them when you add, move or name a documentation file, or decide where a repository's documents live. A repository's own recorded layout, written in its documentation convention, wins over them, because it records a choice made for that repository; they apply where it is silent, including in a repository that has recorded no layout. The rules that hold in every repository (the documentation core, such as keeping process records out of the repository and `docs/README.md` as the index) stand above both.
 
-A repository departs from a recommendation by writing its choice and the reason in its documentation convention, never by a session deciding silently, because a silent departure looks like a mistake to the next reader and the next session undoes it. Do not move or rename an existing page, or a section of one, only to meet these recommendations, because moving it breaks its links.
+A repository departs from a recommendation by writing its choice and the reason in that convention, never by a session deciding silently, because a silent departure looks like a mistake to the next reader and the next session undoes it. Do not move or rename an existing page, or a section of one, only to meet these recommendations, because moving it breaks its links.
 
 ## Lay out for each way the documentation is read
 
 The same files can be read in several ways, and each way needs something different. Apply the part for each way your documentation is read today.
 
 - **As a folder in the repository**, in the GitHub view, an editor, a clone or by an agent with grep. The file tree is the only menu, so make the folder work with no menu: name each folder and file for what a reader finds inside, keep the index page current, and link between pages by relative file path. The file name is the only label this reader sees, and a relative file link works in every clone and in the GitHub view.
-- **On a site.** Give the site its menu, its order and its page addresses through front matter and the site's own configuration, never by moving or renaming files, because the same files must keep working as a folder and every move breaks a link. The section on front matter below applies.
-- **As a page delivered alone**, such as a page an agent receives by name, an export or a pasted page. Make such a page depend on no relative link: it says in its text what the reader needs, and a link it keeps is extra, with link text that names what it points to, because a relative link leads nowhere outside the folder.
+- **On a site.** Give the site its menu, its order and its page addresses through front matter and the site's own configuration, never by moving or renaming files, because the same files must keep working as a folder and every move breaks a link.
+- **As a page delivered alone**, such as a page an agent receives by name, an export or a pasted page. Keep its relative links for the folder reader, but make its text depend on none of them: the page says what the reader needs, and each link is extra, with link text that names what it points to, because a relative link leads nowhere outside the folder.
 
 ## Where a document goes
 
 - Keep each product's documentation in that product's own repository, because the documentation then changes in the same commit as what it describes.
-- Name a page after its unit, the thing or task the repository's convention makes one page, and put it directly in `docs/` until a group of pages shares one reader or one part of the product. Then give the group a folder named after that reader or part, such as `maintainers/` or `cli/`. Make a folder when its first page is written, because an empty folder promises pages nobody wrote.
+- Name a page after its unit, the thing or task the repository's convention makes one page, and put it directly in `docs/` until a group of pages shares one reader or one part of the product. Then give the group a folder named after that reader or part, such as `maintainers/` or `cli/`. Make a folder when its first page is written, because an empty folder promises pages nobody wrote. The folder that holds the repository's own documentation convention is the one exception, because its path is fixed for every repository.
 - Keep a page that explains a feature to the person who uses it out of a folder of lookup facts, such as `reference/`, because a person looking for how to use a feature does not look among lookup facts.
 - Sorting pages into folders by kind (`tutorials/`, `how-to/`, `reference/`, `explanation/`) as the main tree is not used, because a page complete for its unit mixes those kinds and the folder name then misleads.
 - Keep a product's requirements document (PRD) in the repository where the repository's own layout puts it, as the committed plan that every checkout shares. It is the plan, so it describes planned work.
